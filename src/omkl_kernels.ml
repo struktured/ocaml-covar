@@ -16,10 +16,13 @@ struct
     type t = Float.t array
   end
 
-  type temporal_feature = {temporal:Float_array.t;feature:Float_array.t}
-  module Temporal_feature : S with type t = temporal_feature =
+  module Temporal_feature :
+  sig
+      type t ={temporal:Float_array.t;feature:Float_array.t}
+      include S with type t := t
+  end =
   struct
-    type t = temporal_feature = {temporal:Float_array.t;feature:Float_array.t}
+    type t = {temporal:Float_array.t;feature:Float_array.t}
   end
 end
 
