@@ -1,0 +1,26 @@
+OASISFormat: 0.4
+OCamlVersion: >= 4.0.0
+Name:        omkl
+Version:     0.1
+License:     MIT
+LicenseFile: LICENSE.txt
+Authors:     Carmelo Piccione
+Synopsis:    Online Multi-resolution Kernels, In OCaml
+BuildTools:  ocamlbuild
+Plugins: META (0.4), DevFiles (0.4)
+XDevFilesEnableMakefile: true
+
+
+Flag all
+  Description: build and install everything
+  Default: false
+
+Library "omkl"
+  Pack:               false
+  Build:              true
+  Path:               src
+  Modules:            Omkl_kernels
+  BuildDepends:       threads, core, lacaml, ppx_deriving, ppx_deriving.make, ppx_deriving.show
+  XMETADescription:   Online Multi-resolution Kernel Library
+
+AlphaFeatures : ocamlbuild_more_args
