@@ -19,7 +19,7 @@ Library "omkl"
   Pack:               false
   Build:              true
   Path:               src
-  Modules:            Omkl_kernels
+  Modules:            Omkl_instance, Omkl_kernels
   BuildDepends:       threads, core, lacaml, ppx_deriving, ppx_deriving.make, ppx_deriving.show
   XMETADescription:   Online Multi-resolution Kernel Library
 
