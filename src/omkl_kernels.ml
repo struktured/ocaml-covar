@@ -51,7 +51,7 @@ struct
     Lacaml_D.dot t.weights dists
 end
 
-module Temporal_feature
+module Temporal_descriptor
  (Temporal_kernel :S with module Instance = Instance.Float)
  (Feature_kernel: S with module Instance = Instance.Float) : S with module Instance = Instance.Temporal_feature =
 struct
