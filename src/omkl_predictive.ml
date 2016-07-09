@@ -1,22 +1,29 @@
 (** Kerned-based predictive functions *)
 open Core.Std
 module Vec = Lacaml_D.Vec
+
+(** A predictive kernel function. Requires a kernel type definition *)
 module type S =
 sig
 type t
 module Kernel : Omkl_kernel.S
 module Instance = Kernel.Instance
 val predict : t -> Instance.t -> float
+(** Given a predictor and an instance, predict the output (target) value. *)
 end
 
-module type S_buffered =
+(** A buffered version of a predictive function, allowing
+    adding of support instances to the model dynamically. *)
+module Buffered = 
+struct
+module type S =
 sig
   include S
   val empty : ?init_buffer_size:int -> ?bounded_buffer:bool -> Kernel.t -> t
+  val add_support : t -> weight:float -> Instance.t -> t
 end
-
-module Ring_buffered(Kernel:Omkl_kernel.S with module Instance = Omkl_instance.Float) :
-  S_buffered with module Kernel = Kernel =
+module Make(Kernel:Omkl_kernel.S with module Instance = Omkl_instance.Float)(Predictor:S) :
+  S with module Kernel = Kernel =
 struct
   module Kernel = Kernel
   module Instance = Kernel.Instance
@@ -35,7 +42,7 @@ struct
   let predict (t:t) (x:Instance.t) =
     let instances : Float.t array = Instance_buffer.to_array t.instances in instances |>
       Array.map ~f:(fun x' -> Kernel.apply t.kernel x' x) |>
-      Vec.of_array |>
+      Vec.of_array |> 
       Lacaml_D.dot (Weights_buffer.to_array t.weights |> Vec.of_array)
 
   let add_support (t:t) ~weight instance =
@@ -45,4 +52,5 @@ struct
         Instance_buffer.push_back t.instances instance;
         t
       end
+end
 end
