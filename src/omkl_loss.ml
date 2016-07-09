@@ -3,16 +3,19 @@ open Core.Std
 module type S =
 sig
 type t
-module Kernel : Omkl_kernels.S
-val loss : t -> Kernel.t -> Kernel.Instance.t -> float -> float
+module Predictive : Omkl_predictive.S
+module Instance = Predictive.Instance
+val loss : t -> Predictive.t -> Instance.t -> float -> float
 end
 
-module MSE(Kernel:Omkl_kernels.S) : S =
+module MSE(Predictive:Omkl_predictive.S) :
+  S with module Predictive = Predictive =
 struct
  type t
- module Kernel = Kernel
- let loss t k i y =
+ module Predictive = Predictive
+ module Instance = Predictive.Instance
+ let loss t f x y =
    let open Float in
-   (* add dot product to kernel function *)
-   (Kernel.apply k i - y) ** 2.0
+   let y_pred = Predictive.predict f x in
+   (y_pred - y) ** 2.
 end
