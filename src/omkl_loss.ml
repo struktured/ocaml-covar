@@ -6,20 +6,28 @@ open Core.Std
 module type S =
 sig
 type t
-  module Predictive : Omkl_predictive.S
-  module Instance = Predictive.Instance
-  val loss : t -> Predictive.t -> Instance.t -> float -> float
+  module Instance : Omkl_instance.S
+  val loss : t -> Instance.t -> predicted:float -> actual:float -> float
 end
 
-(** Mean squared error loss function *)
-module MSE(Predictive:Omkl_predictive.S) :
-  S with module Predictive = Predictive =
+(** Mean squared error loss function. For regression. *)
+module MSE(Instance:Omkl_instance.S) :
+  S with module Instance = Instance =
 struct
  type t
- module Predictive = Predictive
- module Instance = Predictive.Instance
- let loss t f x y =
+ module Instance = Instance
+ let loss t x ~predicted ~actual =
    let open Float in
-   let y_pred = Predictive.predict f x in
-   (y_pred - y) ** 2.
+   (predicted - actual) ** 2.
+end
+
+(** Hinge loss error function. For classification. *)
+module Hing_loss(Instance:Omkl_instance.S) :
+  S with module Instance = Instance =
+struct
+ type t
+ module Instance = Instance
+ let loss t x ~predicted ~actual =
+   let open Float in
+   max 0. (1. - actual*predicted)
 end
