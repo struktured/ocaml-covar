@@ -1,9 +1,9 @@
 # OASIS_START
-# DO NOT EDIT (digest: dacc0be7c5196b01b6b5469f75977e45)
+# DO NOT EDIT (digest: ef46e10fc4442dc842f6f927a738e8fc)
 version = "0.1"
 description = "Online Multi-resolution Kernel Library"
 requires =
-"threads core lacaml ppx_deriving ppx_deriving.make ppx_deriving.show"
+"threads core containers lacaml ppx_deriving ppx_deriving.make ppx_deriving.show"
 archive(byte) = "omkl.cma"
 archive(byte, plugin) = "omkl.cma"
 archive(native) = "omkl.cmxa"

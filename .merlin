@@ -1,4 +1,4 @@
-PKG oml core ppx_deriving.show ppx_deriving.make
+PKG oml core containers ppx_deriving.show ppx_deriving.make
 S src
 B _build/**
 

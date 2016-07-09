@@ -20,7 +20,7 @@ Library "omkl"
   Build:              true
   Path:               src
   Modules:            Omkl_instance, Omkl_kernel, Omkl_predictive, Omkl_loss
-  BuildDepends:       threads, core, lacaml, ppx_deriving, ppx_deriving.make, ppx_deriving.show
+  BuildDepends:       threads, core, containers, lacaml, ppx_deriving, ppx_deriving.make, ppx_deriving.show
   XMETADescription:   Online Multi-resolution Kernel Library
 
 AlphaFeatures : ocamlbuild_more_args
