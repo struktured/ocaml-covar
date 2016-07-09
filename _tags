@@ -1,0 +1,25 @@
+# OASIS_START
+# DO NOT EDIT (digest: 25a57f3b3021e78b2df4d1134d6329cb)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
+# useless stuff for the build process
+true: annot, bin_annot
+<**/.svn>: -traverse
+<**/.svn>: not_hygienic
+".bzr": -traverse
+".bzr": not_hygienic
+".hg": -traverse
+".hg": not_hygienic
+".git": -traverse
+".git": not_hygienic
+"_darcs": -traverse
+"_darcs": not_hygienic
+# Library omkl
+"src/omkl.cmxs": use_omkl
+<src/*.ml{,i,y}>: package(core)
+<src/*.ml{,i,y}>: package(lacaml)
+<src/*.ml{,i,y}>: package(ppx_deriving)
+<src/*.ml{,i,y}>: package(ppx_deriving.make)
+<src/*.ml{,i,y}>: package(ppx_deriving.show)
+<src/*.ml{,i,y}>: package(threads)
+# OASIS_STOP

@@ -4,13 +4,13 @@ module Vec = Lacaml_D.Vec
 module type S =
 sig
 type t
-module Kernel : Omkl_kernels.S
+module Kernel : Omkl_kernel.S
 module Instance = Kernel.Instance
 val predict : t -> Instance.t -> float
 end
 
 
-module Make(Kernel:Omkl_kernels.S) :
+module Make(Kernel:Omkl_kernel.S) :
   S with module Kernel = Kernel =
 struct
   module Kernel = Kernel
