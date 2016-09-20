@@ -41,8 +41,8 @@ struct
 
   let predict (t:t) (x:Instance.t) =
     let instances : Float.t array = Instance_buffer.to_array t.instances in instances |>
-      Array.map ~f:(fun x' -> Kernel.apply t.kernel x' x) |>
-      Vec.of_array |> 
+      Array.map ~f:(fun x' -> Kernel.covar t.kernel x' x) |>
+      Vec.of_array |>
       Lacaml_D.dot (Weights_buffer.to_array t.weights |> Vec.of_array)
 
   let add_support (t:t) ~weight instance =
