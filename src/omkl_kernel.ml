@@ -3,7 +3,8 @@ type vec = Lacaml_float64.vec
 module Mat = Lacaml_D.Mat
 type mat = Lacaml_D.mat
 module Instance = Omkl_instance
-
+module Optional_args = Omkl_optional_args
+module Gamma = Omkl_gamma
 module Array = struct
 include Core.Std.Array
 let map2i t1 t2 ~f = let cnt = ref 0 in Array.map2_exn t1 t2 
@@ -11,8 +12,10 @@ let map2i t1 t2 ~f = let cnt = ref 0 in Array.map2_exn t1 t2
     let res = f i e1 e2 in cnt := i + 1; res)
 end
 
-module type S = sig
-  type t
+module type S =
+sig
+ type t
+(*  module Optional_args : Optional_args.S *)
   module Instance : Instance.S
   val covar : t -> Instance.t -> Instance.t -> float
 end
@@ -27,7 +30,7 @@ struct
     let dist = abs (x - x') in
     (min dist (t.cycle_len - dist)) ** 2.0
     /
-    (2.0 * t.bandwidth ** 2.0) |> neg |> exp
+   (2.0 * t.bandwidth ** 2.0) |> neg |> exp
 end
 
 module Squared_exponential : S with module Instance = Instance.Float =
@@ -35,10 +38,40 @@ struct
   module Instance = Instance.Float
   type t = {amplitude:float [@default 1.];bandwidth:float} [@@deriving show, make]
   let covar t x x' =
-    let open Float in
-    (x - x') ** 2.0
+    let open Instance in
+    (x - x') ** two
     /
-    (2.0 * t.bandwidth ** 2.0) |> neg |> exp |> scale (t.amplitude ** 2.0)
+    (two * t.bandwidth ** two) |> neg |> exp |> scale (t.amplitude ** two)
+end
+
+module Matern : S with module Instance = Instance.Float =
+struct
+  module K_v = Omkl_bessel
+  module Instance = Instance.Float
+  module Optional_args =
+  struct
+    type t =
+      {amplitude:float [@default 1.];bandwidth:float; v:float}
+    let default = {amplitude=1.0;bandwidth=1.0;v=1.5}
+  end
+
+type t = {base:float; coeff:float; v:float}
+
+let create ?(opt=Optional_args.default) () =
+   let open Instance in
+   let open Optional_args in
+   let base = sqrt (two * opt.v) / opt.bandwidth in
+   let pow_over_fact = (two ** (one - opt.v) / Gamma.gamma opt.v) in
+   let coeff = pow_over_fact * opt.amplitude * opt.amplitude in
+   let v = opt.v in
+   {base;coeff;v}
+
+let covar t x x' =
+  let open Instance in
+  let scaled_d = (x - x') in
+    t.coeff *
+    scaled_d ** t.v *
+    K_v.bessel_k ~v:(to_int t.v) scaled_d
 end
 
 module Multi(K:S with module Instance = Instance.Float) : S with module Instance = Instance.Float_array =

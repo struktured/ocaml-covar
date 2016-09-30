@@ -1,9 +1,9 @@
 (** Interface for instances from training sets. *)
 module type S = sig type t end
 
-module Float : S with type t = float =
+module Float (* : S with type t = float *) =
 struct
-  type t = float
+  include Omkl_float
 end
 
 module Float_array : S with type t = Float.t array =
