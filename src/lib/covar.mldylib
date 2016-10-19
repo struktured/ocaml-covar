@@ -1,0 +1,11 @@
+# OASIS_START
+# DO NOT EDIT (digest: f11e5157d5777e3666b74c99245e3be4)
+Covar_optional_args
+Covar_float
+Covar_gamma
+Covar_bessel
+Covar_instance
+Covar_kernel
+Covar_predictive
+Covar_loss
+# OASIS_STOP
