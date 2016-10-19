@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: 8b0afa0c7c163120169b65bf73b99dcb)
+version = "0.1"
+description = "Covariance functions (Kernels), In OCaml"
+requires = "kaputt covar"
+archive(byte) = "covar_test.cma"
+archive(byte, plugin) = "covar_test.cma"
+archive(native) = "covar_test.cmxa"
+archive(native, plugin) = "covar_test.cmxs"
+exists_if = "covar_test.cma"
+# OASIS_STOP
+

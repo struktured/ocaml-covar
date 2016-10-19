@@ -2,11 +2,11 @@ open Core.Std
 type vec = Lacaml_float64.vec
 module Mat = Lacaml_D.Mat
 type mat = Lacaml_D.mat
-module Instance = Omkl_instance
-module Optional_args = Omkl_optional_args
+module Instance = Covar_instance
+module Optional_args = Covar_optional_args
 module Create = Optional_args.Create
 
-module Gamma = Omkl_gamma
+module Gamma = Covar_gamma
 module Array = struct
 include Core.Std.Array
 let map2i t1 t2 ~f = let cnt = ref 0 in Array.map2_exn t1 t2 
@@ -84,7 +84,7 @@ module Matern : S with
  module Optional_args = Matern_optional_args and
  module Instance = Instance.Float =
 struct
-  module K_v = Omkl_bessel
+  module K_v = Covar_bessel
   module Instance = Instance.Float
   module Optional_args = Matern_optional_args
 
@@ -108,21 +108,21 @@ let covar t x x' =
 end
 
 
-module Multi_optional_args(K : S with module Instance = Instance.Float) =
+module Multi_optional_args(K : S (*with module Instance = Instance.Float*)) =
 struct
   type t = {weights:vec; kernels: K.t array} [@@deriving make]
   let default = {weights=Lacaml_D.Vec.empty; kernels=[||]}
 end
 
-module Multi(K : S with module Instance = Instance.Float) : S with
+module Multi(K : S (*with module Instance = Instance.Float*)) : S with
   module Optional_args = Multi_optional_args(K) and
-  module Instance = Instance.Float_array =
+  module Instance = Instance.Array(K.Instance) =
 struct
   module Optional_args = Multi_optional_args(K)
   open Optional_args
   type t = Optional_args.t
   include Create(Optional_args)
-  module Instance = Instance.Float_array
+  module Instance = Instance.Array(K.Instance)
   let covar t x x' =
     let dists = Array.mapi
         ~f:(fun i k -> K.covar k x.(i) x'.(i)) t.kernels
@@ -212,9 +212,8 @@ end
 *)
 
 module Normalized_heterogeneous_optional_args
-  (I : Instance.S)
-  (K1 : S with module Instance = I)
-  (K2 : S with module Instance = I) =
+  (K1:S)
+  (K2:S) =
 struct
 type t = {weights:mat; kernel1: K1.t array; kernel2 : K2.t array}
            [@@deriving make]
@@ -223,26 +222,29 @@ end
 
 
 module Normalized_heterogeneuos
-    (K1:S with module Instance = Instance.Float)
-    (K2:S with module Instance = Instance.Float) :
+ (I1: Instance.S)
+ (I2: Instance.S)
+ (K1 : S with module Instance = I1)
+ (K2 : S with module Instance = I2) :
   S with
-   module Optional_args = Heterogeneous_optional_args(Instance.Float)(K1)(K2) and
-   module Instance = Instance.Float_array2 =
+   module Optional_args = Heterogeneous_optional_args(K1)(K2) and
+   module Instance = Instance.Heterogeneous_array_feature(I1)(I2) =
 struct
    module Multi_K1 = Multi(K1)
    module Multi_K2 = Multi(K2)
-   module Optional_args = Heterogeneous_optional_args(Instance.Float)(K1)(K2)
-   include Create(Optional_args)
-   type t = Optional_args.t
-   module Instance = Instance.Float_array2
+   module Optional_args = Heterogeneous_optional_args(K1)(K2)
+   type t = {kernel1:Multi_K1.t;kernel2:Multi_K2.t} [@@deriving make]
+   let create ?(opt=Optional_args.default) () = failwith("nyi")
+ 
+   module Instance = Instance.Heterogeneous_array_feature(I1)(I2)
   (* type t = {temporal_kernel:Multi_K1.t;
              feature_kernel:Multi_K2.t} [@@deriving make]
 *)
    let covar t (x:Instance.t) (x':Instance.t) =
      let open Float in
      (Multi_K1.covar
-       t.temporal_kernel x.Instance.feature1 x'.Instance.feature1)
+       t.kernel1 x.Instance.feature1 x'.Instance.feature1)
      *
      (Multi_K2.covar
-        t.feature_kernel x.Instance.feature2 x'.Instance.feature2)
+        t.kernel2 x.Instance.feature2 x'.Instance.feature2)
 end

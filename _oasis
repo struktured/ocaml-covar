@@ -1,26 +1,49 @@
 OASISFormat: 0.4
 OCamlVersion: >= 4.0.0
-Name:        omkl
+Name:        covar
 Version:     0.1
 License:     MIT
 LicenseFile: LICENSE.txt
 Authors:     Carmelo Piccione
-Synopsis:    Online Multi-resolution Kernels, In OCaml
+Synopsis:    Covariance functions (Kernels), In OCaml
 BuildTools:  ocamlbuild
 Plugins: META (0.4), DevFiles (0.4)
 XDevFilesEnableMakefile: true
+AlphaFeatures : ocamlbuild_more_args
 
+Flag install_tests
+  Description: install test library (for developers)
+  Default: false
 
 Flag all
   Description: build and install everything
   Default: false
 
-Library "omkl"
+Library covar
   Pack:               false
   Build:              true
-  Path:               src
-  Modules:            Omkl_optional_args, Omkl_float, Omkl_gamma, Omkl_bessel, Omkl_instance, Omkl_kernel, Omkl_predictive, Omkl_loss
-  BuildDepends:       threads, core, containers, lacaml, gsl, ppx_deriving, ppx_deriving.make, ppx_deriving.show
-  XMETADescription:   Online Multi-resolution Kernel Library
+  Path:               src/lib
+  Modules:            Covar_optional_args, Covar_float, Covar_gamma, Covar_bessel,
+                      Covar_instance, Covar_kernel, Covar_predictive, Covar_loss
+  BuildDepends:       threads, core, containers, lacaml, gsl, ppx_deriving,
+                      ppx_deriving.make, ppx_deriving.show
+  XMETADescription:   Covariance functions for machine learning.
 
-AlphaFeatures : ocamlbuild_more_args
+Library covar_test
+  Path: src/test
+  Build$: flag(tests)
+  Modules: Covar_test
+  Install$: flag(install_tests)
+  BuildDepends: kaputt, covar
+
+Executable test_kernel
+  Path:               src/test
+  Build$:             flag(tests) || flag(all)
+  MainIs:             test_kernel.ml
+  BuildDepends:       kaputt, covar, covar_test
+
+Test test_kernel
+  Command: $test_kernel
+  TestTools: test_kernel
+  Run$: flag(tests) || flag(all)
+

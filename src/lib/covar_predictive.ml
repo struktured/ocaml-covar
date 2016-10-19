@@ -6,7 +6,7 @@ module Vec = Lacaml_D.Vec
 module type S =
 sig
 type t
-module Kernel : Omkl_kernel.S
+module Kernel : Covar_kernel.S
 module Instance = Kernel.Instance
 val predict : t -> Instance.t -> float
 (** Given a predictor and an instance, predict the output (target) value. *)
@@ -22,7 +22,7 @@ sig
   val empty : ?init_buffer_size:int -> ?bounded_buffer:bool -> Kernel.t -> t
   val add_support : t -> weight:float -> Instance.t -> t
 end
-module Make(Kernel:Omkl_kernel.S with module Instance = Omkl_instance.Float)(Predictor:S) :
+module Make(Kernel:Covar_kernel.S with module Instance = Covar_instance.Float)(Predictor:S) :
   S with module Kernel = Kernel =
 struct
   module Kernel = Kernel

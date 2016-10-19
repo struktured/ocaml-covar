@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 7ae00350df8bdf2214e077033e5db5c0)
+# DO NOT EDIT (digest: fe3d4dedb0b744fde8e33a03c525c431)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -14,14 +14,39 @@ true: annot, bin_annot
 ".git": not_hygienic
 "_darcs": -traverse
 "_darcs": not_hygienic
-# Library omkl
-"src/omkl.cmxs": use_omkl
-<src/*.ml{,i,y}>: package(containers)
-<src/*.ml{,i,y}>: package(core)
-<src/*.ml{,i,y}>: package(gsl)
-<src/*.ml{,i,y}>: package(lacaml)
-<src/*.ml{,i,y}>: package(ppx_deriving)
-<src/*.ml{,i,y}>: package(ppx_deriving.make)
-<src/*.ml{,i,y}>: package(ppx_deriving.show)
-<src/*.ml{,i,y}>: package(threads)
+# Library covar
+"src/lib/covar.cmxs": use_covar
+<src/lib/*.ml{,i,y}>: package(containers)
+<src/lib/*.ml{,i,y}>: package(core)
+<src/lib/*.ml{,i,y}>: package(gsl)
+<src/lib/*.ml{,i,y}>: package(lacaml)
+<src/lib/*.ml{,i,y}>: package(ppx_deriving)
+<src/lib/*.ml{,i,y}>: package(ppx_deriving.make)
+<src/lib/*.ml{,i,y}>: package(ppx_deriving.show)
+<src/lib/*.ml{,i,y}>: package(threads)
+# Library covar_test
+"src/test/covar_test.cmxs": use_covar_test
+# Executable test_kernel
+"src/test/test_kernel.byte": package(containers)
+"src/test/test_kernel.byte": package(core)
+"src/test/test_kernel.byte": package(gsl)
+"src/test/test_kernel.byte": package(kaputt)
+"src/test/test_kernel.byte": package(lacaml)
+"src/test/test_kernel.byte": package(ppx_deriving)
+"src/test/test_kernel.byte": package(ppx_deriving.make)
+"src/test/test_kernel.byte": package(ppx_deriving.show)
+"src/test/test_kernel.byte": package(threads)
+"src/test/test_kernel.byte": use_covar
+"src/test/test_kernel.byte": use_covar_test
+<src/test/*.ml{,i,y}>: package(containers)
+<src/test/*.ml{,i,y}>: package(core)
+<src/test/*.ml{,i,y}>: package(gsl)
+<src/test/*.ml{,i,y}>: package(kaputt)
+<src/test/*.ml{,i,y}>: package(lacaml)
+<src/test/*.ml{,i,y}>: package(ppx_deriving)
+<src/test/*.ml{,i,y}>: package(ppx_deriving.make)
+<src/test/*.ml{,i,y}>: package(ppx_deriving.show)
+<src/test/*.ml{,i,y}>: package(threads)
+<src/test/*.ml{,i,y}>: use_covar
+<src/test/*.ml{,i,y}>: use_covar_test
 # OASIS_STOP

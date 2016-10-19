@@ -1,4 +1,6 @@
 PKG oml lacaml core containers ppx_deriving.show ppx_deriving.make gsl
-S src
+PKG kaputt
+S src/test
+S src/lib
 B _build/**
 

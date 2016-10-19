@@ -6,12 +6,12 @@ open Core.Std
 module type S =
 sig
 type t
-  module Instance : Omkl_instance.S
+  module Instance : Covar_instance.S
   val loss : t -> Instance.t -> predicted:float -> actual:float -> float
 end
 
 (** Mean squared error loss function. For regression. *)
-module MSE(Instance:Omkl_instance.S) :
+module MSE(Instance:Covar_instance.S) :
   S with module Instance = Instance =
 struct
  type t
@@ -22,7 +22,7 @@ struct
 end
 
 (** Hinge loss error function. For classification. *)
-module Hing_loss(Instance:Omkl_instance.S) :
+module Hing_loss(Instance:Covar_instance.S) :
   S with module Instance = Instance =
 struct
  type t
