@@ -31,7 +31,7 @@ Library covar
 
 Library covar_test
   Path: src/test
-  Build$: flag(tests)
+  Build$: flag(tests) || flag(all)
   Modules: Covar_test
   Install$: flag(install_tests)
   BuildDepends: kaputt, covar
