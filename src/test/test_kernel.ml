@@ -47,7 +47,21 @@ struct
  let one_when_same =
    Comparison_test.for_k_x_x ~kernel
       ?trials:None ~title_tag:"squared_exponential" ~equal_to:1.0
+ let tests = [one_when_same]
 end
 
-let () = Kaputt.Abbreviations.Test.run_tests
-  [Squared_exponential_test.one_when_same]
+module Matern_test =
+struct
+ module K = Matern
+ module Comparison_test = Comparison_test(K)
+ let kernel = K.create ()
+ let one_when_same =
+   Comparison_test.for_k_x_x ~kernel
+      ?trials:None ~title_tag:"matern" ~equal_to:1.0
+ let tests = [one_when_same]
+end
+
+
+
+let () = Kaputt.Abbreviations.Test.run_tests @@
+    List.concat [Squared_exponential_test.tests; Matern_test.tests]

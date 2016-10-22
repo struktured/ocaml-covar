@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: fe3d4dedb0b744fde8e33a03c525c431)
+# DO NOT EDIT (digest: ab94176d2d6baf65a408e88c2a573083)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -17,6 +17,7 @@ true: annot, bin_annot
 # Library covar
 "src/lib/covar.cmxs": use_covar
 <src/lib/*.ml{,i,y}>: package(containers)
+<src/lib/*.ml{,i,y}>: package(containers.data)
 <src/lib/*.ml{,i,y}>: package(core)
 <src/lib/*.ml{,i,y}>: package(gsl)
 <src/lib/*.ml{,i,y}>: package(lacaml)
@@ -28,6 +29,7 @@ true: annot, bin_annot
 "src/test/covar_test.cmxs": use_covar_test
 # Executable test_kernel
 "src/test/test_kernel.byte": package(containers)
+"src/test/test_kernel.byte": package(containers.data)
 "src/test/test_kernel.byte": package(core)
 "src/test/test_kernel.byte": package(gsl)
 "src/test/test_kernel.byte": package(kaputt)
@@ -39,6 +41,7 @@ true: annot, bin_annot
 "src/test/test_kernel.byte": use_covar
 "src/test/test_kernel.byte": use_covar_test
 <src/test/*.ml{,i,y}>: package(containers)
+<src/test/*.ml{,i,y}>: package(containers.data)
 <src/test/*.ml{,i,y}>: package(core)
 <src/test/*.ml{,i,y}>: package(gsl)
 <src/test/*.ml{,i,y}>: package(kaputt)

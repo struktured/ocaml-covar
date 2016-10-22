@@ -1,9 +1,9 @@
 # OASIS_START
-# DO NOT EDIT (digest: 1f03b26a82486c627eab1c912a58a4f7)
+# DO NOT EDIT (digest: 1d227d895a5d62d9caa51149f20e368f)
 version = "0.1"
 description = "Covariance functions for machine learning."
 requires =
-"threads core containers lacaml gsl ppx_deriving ppx_deriving.make ppx_deriving.show"
+"threads core containers containers.data lacaml gsl ppx_deriving ppx_deriving.make ppx_deriving.show"
 archive(byte) = "covar.cma"
 archive(byte, plugin) = "covar.cma"
 archive(native) = "covar.cmxa"

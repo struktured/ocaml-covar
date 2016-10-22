@@ -25,7 +25,7 @@ Library covar
   Path:               src/lib
   Modules:            Covar_optional_args, Covar_float, Covar_gamma, Covar_bessel,
                       Covar_instance, Covar_kernel, Covar_predictive, Covar_loss
-  BuildDepends:       threads, core, containers, lacaml, gsl, ppx_deriving,
+  BuildDepends:       threads, core, containers, containers.data, lacaml, gsl, ppx_deriving,
                       ppx_deriving.make, ppx_deriving.show
   XMETADescription:   Covariance functions for machine learning.
 
