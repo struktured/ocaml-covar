@@ -32,10 +32,10 @@ Library covar
 Library kernels
    Path:              src/lib/kernels
    Pack:              false
-   Modules:           Covar_squared_exponential, Covar_matern, Covar_temporal, Covar_homogenous, Covar_heterogenous
+   Modules:           Covar_squared_exponential, Covar_matern, Covar_temporal, Covar_homogeneous, Covar_heterogeneous
    FindLibParent:     covar
    Build:             true
-   BuildDepends:      lacaml, gsl
+   BuildDepends:      covar, lacaml, gsl
 
 Library test
   Path: src/test
@@ -49,7 +49,7 @@ Executable test_kernel
   Path:               src/test
   Build$:             flag(tests) || flag(all)
   MainIs:             test_kernel.ml
-  BuildDepends:       kaputt, covar.test
+  BuildDepends:       kaputt, covar.kernels, covar.test
 
 Test test_kernel
   Command: $test_kernel

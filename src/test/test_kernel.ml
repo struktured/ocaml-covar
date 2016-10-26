@@ -11,7 +11,7 @@ end
 
 module Comparison_test (K:S_float) =
 struct
- let default_trials = 1000
+ let default_trials = 100
  let min_float = -1e5
  let max_float = abs_float min_float
  let test ?(kernel=(K.create())) ~equal_to x x' =
@@ -64,4 +64,4 @@ end
 
 
 let () = Kaputt.Abbreviations.Test.run_tests @@
-    List.concat [Squared_exponential_test.tests; Matern_test.tests]
+    List.concat [Squared_exponential_test.tests (*; Matern_test.tests*)]

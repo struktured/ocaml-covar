@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 1d227d895a5d62d9caa51149f20e368f)
+# DO NOT EDIT (digest: 5cc20ce2d0ee76c20191883e7aa599ed)
 version = "0.1"
 description = "Covariance functions for machine learning."
 requires =
@@ -9,5 +9,26 @@ archive(byte, plugin) = "covar.cma"
 archive(native) = "covar.cmxa"
 archive(native, plugin) = "covar.cmxs"
 exists_if = "covar.cma"
+package "test" (
+ version = "0.1"
+ description = "Covariance functions for machine learning."
+ requires = "kaputt covar"
+ archive(byte) = "test.cma"
+ archive(byte, plugin) = "test.cma"
+ archive(native) = "test.cmxa"
+ archive(native, plugin) = "test.cmxs"
+ exists_if = "test.cma"
+)
+
+package "kernels" (
+ version = "0.1"
+ description = "Covariance functions for machine learning."
+ requires = "covar lacaml gsl"
+ archive(byte) = "kernels.cma"
+ archive(byte, plugin) = "kernels.cma"
+ archive(native) = "kernels.cmxa"
+ archive(native, plugin) = "kernels.cmxs"
+ exists_if = "kernels.cma"
+)
 # OASIS_STOP
 
