@@ -29,9 +29,18 @@ Library covar
                       ppx_deriving.make, ppx_deriving.show
   XMETADescription:   Covariance functions for machine learning.
 
-Library covar_test
+Library kernels
+   Path:              src/lib/kernels
+   Pack:              false
+   Modules:           Covar_squared_exponential, Covar_matern, Covar_temporal, Covar_homogenous, Covar_heterogenous
+   FindLibParent:     covar
+   Build:             true
+   BuildDepends:      lacaml, gsl
+
+Library test
   Path: src/test
   Build$: flag(tests) || flag(all)
+  FindLibParent: covar
   Modules: Covar_test
   Install$: flag(install_tests)
   BuildDepends: kaputt, covar
@@ -40,7 +49,7 @@ Executable test_kernel
   Path:               src/test
   Build$:             flag(tests) || flag(all)
   MainIs:             test_kernel.ml
-  BuildDepends:       kaputt, covar, covar_test
+  BuildDepends:       kaputt, covar.test
 
 Test test_kernel
   Command: $test_kernel
