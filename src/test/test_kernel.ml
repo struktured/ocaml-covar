@@ -2,11 +2,12 @@ open Kaputt.Abbreviations
 
 open Printf
 
-include Covar_kernel
+open Covar.Std
+open Covar_kernels.Std
 module type S_float =
 sig
-include S with
-  module Instance = Covar_instance.Float
+include Kernel.S with
+  module Instance = Float
 end
 
 module Comparison_test (K:S_float) =
@@ -15,9 +16,11 @@ struct
  let min_float = -1e5
  let max_float = abs_float min_float
  let test ?(kernel=(K.create())) ~equal_to x x' =
+      printf "[pre] x=%f, x'=%f, equal_to=%f\n" x x'
+        equal_to;
       let cov = K.covar kernel x x' in
       let cmp = Gsl_math.fcmp cov equal_to ~epsilon:(1.e-5) in
-      printf "x=%f, x'=%f, equal_to=%f, cov=%f, cmp=%d\n" x x' 
+      printf "[post] x=%f, x'=%f, equal_to=%f, cov=%f, cmp=%d\n" x x' 
         equal_to cov cmp;
       cmp
  let for_k_x_x ?kernel ?(trials=default_trials) ~title_tag ~equal_to =
@@ -64,4 +67,4 @@ end
 
 
 let () = Kaputt.Abbreviations.Test.run_tests @@
-    List.concat [Squared_exponential_test.tests (*; Matern_test.tests*)]
+    List.concat [Squared_exponential_test.tests ; Matern_test.tests]

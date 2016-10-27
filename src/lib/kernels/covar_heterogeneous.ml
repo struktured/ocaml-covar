@@ -1,6 +1,9 @@
 module Kernel = Covar_kernel
 module Instance = Covar_instance
 module Float = Covar_float
+module Mat = Kernel.Mat
+module Homogeneous = Covar_homogeneous
+
 module Heterogeneous_optional_args
   (K1 : Kernel.S )
   (K2 : Kernel.S ) =
@@ -101,21 +104,21 @@ module Normalized_heterogeneuos
    module Optional_args = Heterogeneous_optional_args(K1)(K2) and
    module Instance = Instance.Heterogeneous_array_feature(I1)(I2) =
 struct
-   module Multi_K1 = Multi(K1)
-   module Multi_K2 = Multi(K2)
+   module Homogeneous_K1 = Homogeneous.Make(K1)
+   module Homogeneous_K2 = Homogeneous.Make(K2)
    module Optional_args = Heterogeneous_optional_args(K1)(K2)
-   type t = {kernel1:Multi_K1.t;kernel2:Multi_K2.t} [@@deriving make]
+   type t = {kernel1:Homogeneous_K1.t;kernel2:Homogeneous_K2.t} [@@deriving make]
    let create ?(opt=Optional_args.default) () = failwith("nyi")
  
    module Instance = Instance.Heterogeneous_array_feature(I1)(I2)
-  (* type t = {temporal_kernel:Multi_K1.t;
-             feature_kernel:Multi_K2.t} [@@deriving make]
+  (* type t = {temporal_kernel:Homogeneous_K1.t;
+             feature_kernel:Homogeneous_K2.t} [@@deriving make]
 *)
    let covar t (x:Instance.t) (x':Instance.t) =
      let open Float in
-     (Multi_K1.covar
+     (Homogeneous_K1.covar
        t.kernel1 x.Instance.feature1 x'.Instance.feature1)
      *
-     (Multi_K2.covar
+     (Homogeneous_K2.covar
         t.kernel2 x.Instance.feature2 x'.Instance.feature2)
 end

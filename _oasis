@@ -1,18 +1,26 @@
 OASISFormat: 0.4
-OCamlVersion: >= 4.0.0
+OCamlVersion: >= 4.0.2
 Name:        covar
 Version:     0.1
 License:     MIT
 LicenseFile: LICENSE.txt
 Authors:     Carmelo Piccione
-Synopsis:    Covariance functions (Kernels), In OCaml
+Synopsis:    Covariance functions, in OCaml
 BuildTools:  ocamlbuild
 Plugins: META (0.4), DevFiles (0.4)
+Description: Covariance (kernel) functions for machine learning, in OCaml
+Maintainers: Carmelo Piccione (carmelo.piccione+covar@gmail.com)
+Homepage:    https://github.com/struktured/ocaml-covar
+SourceRepository master
+  Type: git
+  Location: https://github.com/struktured/ocaml-covar.git
+  Branch: master
+  Browser: https://github.com/struktured/ocaml-covar
 XDevFilesEnableMakefile: true
 AlphaFeatures : ocamlbuild_more_args
 
 Flag install_tests
-  Description: install test library (for developers)
+  Description: Install test library (for developers)
   Default: false
 
 Flag all
@@ -24,7 +32,7 @@ Library covar
   Build:              true
   Path:               src/lib
   Modules:            Covar_optional_args, Covar_float, Covar_gamma, Covar_bessel,
-                      Covar_instance, Covar_kernel, Covar_predictive, Covar_loss
+                      Covar_instance, Covar_kernel, Covar_predictive, Covar_loss, Covar
   BuildDepends:       threads, core, containers, containers.data, lacaml, gsl, ppx_deriving,
                       ppx_deriving.make, ppx_deriving.show
   XMETADescription:   Covariance functions for machine learning.
@@ -32,7 +40,7 @@ Library covar
 Library kernels
    Path:              src/lib/kernels
    Pack:              false
-   Modules:           Covar_squared_exponential, Covar_matern, Covar_temporal, Covar_homogeneous, Covar_heterogeneous
+   Modules:           Covar_squared_exponential, Covar_matern, Covar_temporal, Covar_homogeneous, Covar_heterogeneous, Covar_kernels
    FindLibParent:     covar
    Build:             true
    BuildDepends:      covar, lacaml, gsl

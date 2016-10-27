@@ -1,5 +1,4 @@
-module Instance = Covar_instance.Float
-module Kernel = Covar_kernel
+open Covar.Std
 module Distance = Kernel.Stationary.Isotropic
 module Squared_exponential_optional_args =
 struct
@@ -10,11 +9,11 @@ end
 
 module Stationary : Kernel.Stationary.S with
   module Optional_args = Squared_exponential_optional_args and
-  module Instance = Instance =
+  module Instance = Instance.Float =
 struct
   module Optional_args = Squared_exponential_optional_args
   open Optional_args
-  module Instance = Instance
+  module Instance = Instance.Float
 
   type t = Optional_args.t
   include Kernel.Create(Optional_args)
@@ -27,16 +26,16 @@ end
 
 module Nonstationary : Kernel.Nonstationary.S with
  module Optional_args = Squared_exponential_optional_args and
- module Instance = Instance =
+
+module Instance = Instance.Float =
 struct
 module Optional_args = Squared_exponential_optional_args
-module Instance = Instance
+module Instance = Instance.Float
 include (Kernel.Stationary.Wrap
   (Instance)(Distance)(Stationary) : Kernel.S with
   module Instance := Instance and
   module Optional_args := Optional_args)
 end
 
-include (Nonstationary :
-  Kernel.S with module Instance := Instance)
+include Nonstationary
 

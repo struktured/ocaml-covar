@@ -1,7 +1,5 @@
-module Kernel = Covar_kernel
-module Distance = Kernel.Stationary.Isotropic
-module Instance = Covar_instance.Float
-module Gamma = Covar_gamma
+open Covar.Std
+module Isotropic = Kernel.Stationary.Isotropic
 
 module Matern_optional_args =
 struct
@@ -12,10 +10,10 @@ end
 
 module Stationary : Kernel.Stationary.S with
  module Optional_args = Matern_optional_args and
- module Instance = Instance =
+ module Instance = Instance.Float =
 struct
-  module K_v = Covar_bessel
-  module Instance = Instance
+  module K_v = Bessel
+  module Instance = Instance.Float
   module Optional_args = Matern_optional_args
 
   type t = {base:float; coeff:float; v:float} [@@deriving show]
@@ -38,16 +36,15 @@ end
 
 module Nonstationary : Kernel.Nonstationary.S with
  module Optional_args = Matern_optional_args and
- module Instance = Instance =
+ module Instance = Instance.Float =
 struct
 module Optional_args = Matern_optional_args
-module Instance = Instance
+module Instance = Instance.Float
 include (Kernel.Stationary.Wrap
-  (Instance)(Distance)(Stationary) : Kernel.S with
+  (Instance)(Isotropic)(Stationary) : Kernel.S with
   module Instance := Instance and
   module Optional_args := Optional_args)
 end
 
-include (Nonstationary :
-  Kernel.S with module Instance := Instance)
+include Nonstationary
 
