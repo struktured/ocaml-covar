@@ -1,0 +1,9 @@
+# OASIS_START
+# DO NOT EDIT (digest: 0edd4cbae1e66e46dbf377b93c857189)
+Covar_squared_exponential
+Covar_matern
+Covar_temporal
+Covar_homogeneous
+Covar_heterogeneous
+Covar_kernels
+# OASIS_STOP
