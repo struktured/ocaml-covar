@@ -16,22 +16,22 @@ struct
   module Instance = Instance.Float
   module Optional_args = Matern_optional_args
 
-  type t = {base:float; coeff:float; v:float} [@@deriving show]
+type t = {amp_sqr:float; base:float; coeff:float; v:float} [@@deriving show]
 
 let create ?(opt=Optional_args.default) () =
    let open Instance in
    let open Optional_args in
    let base = sqrt (two * opt.v) / opt.bandwidth in
    let pow_over_fact = (two ** (one - opt.v) / Gamma.gamma opt.v) in
-   let coeff = pow_over_fact * opt.amplitude * opt.amplitude in
-   let v = opt.v in
-   {base;coeff;v}
+   let amp_sqr = opt.amplitude * opt.amplitude in
+   let coeff = pow_over_fact * amp_sqr in
+   let v = opt.v in {amp_sqr;base;coeff;v}
 
-let covar t x =
+let covar t x = if x = 0.0 then t.amp_sqr else
   let open Instance in
     t.coeff *
     x ** t.v *
-    K_v.bessel_k ~v:(to_int t.v) x
+    K_v.bessel_k ~nu:t.v x
 end
 
 module Nonstationary : Kernel.Nonstationary.S with
