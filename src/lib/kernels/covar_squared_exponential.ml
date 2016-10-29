@@ -1,5 +1,5 @@
 open Covar.Std
-module Distance = Kernel.Stationary.Isotropic
+module Isotropic = Kernel.Stationary.Isotropic
 module Squared_exponential_optional_args =
 struct
   type t = {amplitude:float [@default 1.0];
@@ -32,7 +32,7 @@ struct
 module Optional_args = Squared_exponential_optional_args
 module Instance = Instance.Float
 include (Kernel.Stationary.Wrap
-  (Instance)(Distance)(Stationary) : Kernel.S with
+  (Instance)(Isotropic)(Stationary) : Kernel.S with
   module Instance := Instance and
   module Optional_args := Optional_args)
 end

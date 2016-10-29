@@ -1,3 +1,5 @@
+
+(* Interface for bessel functions *)
 module type S =
 sig
   (** Modified bessel function of the second kind *)
@@ -6,8 +8,8 @@ end
 
 module Gsl_bessel : S =
 struct
- (** Uses ocaml-gsl as backend for now *)
  let bessel_k ~nu = Gsl_sf.bessel_Knu nu
 end
 
+(** Uses ocaml-gsl as backend for now *)
 include Gsl_bessel

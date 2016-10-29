@@ -1,5 +1,7 @@
 # OASIS_START
-# DO NOT EDIT (digest: 0edd4cbae1e66e46dbf377b93c857189)
+# DO NOT EDIT (digest: f760d9aa05287da15fb4d572ea514166)
+Covar_bias
+Covar_brownian
 Covar_squared_exponential
 Covar_matern
 Covar_temporal

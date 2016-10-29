@@ -8,4 +8,5 @@ struct
   module Kernel = Covar_kernel
   module Loss = Covar_loss
   module Predictive = Covar_predictive
+  module Trig = Covar_trig
 end
