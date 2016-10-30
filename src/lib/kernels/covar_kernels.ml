@@ -8,4 +8,8 @@ struct
   module Heterogeneous = Covar_heterogeneous
   module Normalized_heterogeneous =
     Heterogeneous.Normalized_heterogeneuos
+  module Linear = Covar_linear
+  module Periodic = Covar_periodic
+  module Brownian = Covar_brownian
+  module Bias = Covar_bias
 end
