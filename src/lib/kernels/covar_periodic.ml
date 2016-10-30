@@ -1,4 +1,4 @@
-open Covar.Std:e 
+open Covar.Std
 module Isotropic = Kernel.Stationary.Isotropic
 module Periodic_optional_args =
 struct
@@ -19,13 +19,14 @@ struct
             bandwidth_sqr:float [@default 1.0]} [@@deriving make, show]
 
   let create ?(opt=Optional_args.default) () =
+    let open Float in
     {amp_sqr = opt.amplitude**two;
      period=opt.period;
      bandwidth_sqr=opt.bandwidth**two}
   let covar t x =
     let open Instance in
-    let x' = pi * x / t.period in
-    two * sin ~pow:two x'
+    let x' = Trig.pi * x / t.period in
+    two * Trig.sin ~pow:two x'
     /
     (t.bandwidth_sqr)
     |> neg |> exp |> scale t.amp_sqr

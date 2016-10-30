@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: f760d9aa05287da15fb4d572ea514166)
+# DO NOT EDIT (digest: d6c03af28b147d804b875db8f7995d5d)
 Covar_bias
 Covar_brownian
 Covar_squared_exponential
@@ -8,4 +8,6 @@ Covar_temporal
 Covar_homogeneous
 Covar_heterogeneous
 Covar_kernels
+Covar_linear
+Covar_periodic
 # OASIS_STOP

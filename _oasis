@@ -31,7 +31,7 @@ Library covar
   Pack:               false
   Build:              true
   Path:               src/lib
-  Modules:            Covar_optional_args, Covar_float, Covar_gamma, Covar_bessel,
+  Modules:            Covar_optional_args, Covar_float, Covar_gamma, Covar_bessel, Covar_trig,
                       Covar_instance, Covar_kernel, Covar_predictive, Covar_loss, Covar
   BuildDepends:       threads, core, containers, containers.data, lacaml, gsl, ppx_deriving,
                       ppx_deriving.make, ppx_deriving.show
