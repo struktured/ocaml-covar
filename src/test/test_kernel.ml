@@ -10,47 +10,109 @@ include Kernel.S with
   module Instance = Float
 end
 
-module Comparison_test (K:S_float) =
+let some x = Some x
+
+module Predicates =
+struct
+
+ let _compare ?epsilon ~target = fun ~actual x x' ->
+  let cmp = Float.compare ?epsilon actual target in
+  cmp
+
+ let equal_to ?epsilon ~expected = fun ~actual x x' ->
+  let cmp = _compare ~actual ?epsilon ~target:expected x x'
+  in cmp = 0
+
+ let positive = fun ~actual x x' ->
+  let cmp = _compare ~actual ~target:0.0 x x'
+  in cmp = 1
+
+ let non_negative = fun ~actual x x' ->
+  let cmp = _compare ~actual ~target:0.0 x x'
+  in cmp >= 0
+
+ let to_two_arg f = fun ~actual x x' ->
+    f ~actual x
+ let to_one_arg f = fun ~actual x ->
+    f ~actual x x
+end
+
+module Test_params(K:Kernel.S) =
+struct
+module type S =
+sig
+  val title_tag : string
+  val qualifier : string
+  val opts : K.t option
+end
+end
+
+module Make
+(K:S_float)
+(Test_params : Test_params(K).S) =
 struct
  let default_trials = 100
  let min_float = -1e5
  let max_float = abs_float min_float
- let test ?(kernel=(K.create())) ~equal_to x x' =
-      let equal_to = equal_to x x' in
-      printf "[pre] x=%f, x'=%f, equal_to=%f\n" x x'
-        equal_to;
-      let cov = K.covar kernel x x' in
-      let cmp = Gsl_math.fcmp cov equal_to ~epsilon:(1.e-5) in
-      printf "[post] x=%f, x'=%f, equal_to=%f, cov=%f, cmp=%d\n" x x' 
-        equal_to cov cmp;
-      cmp
- let for_k_x_x ?kernel ?(trials=default_trials) ~title_tag ~equal_to =
+ let eval kernel x x' =
+   printf "[pre] x=%f, x'=%f\n" x x';
+   let actual = K.covar kernel x x' in
+   printf "[post] x=%f, x'=%f, actual=%f\n" x x' actual;
+   actual
+let eval_x_x kernel x = eval kernel x x
+
+let for_k_x_x ?kernel ?(trials=default_trials) ~qualifier ~title_tag ~pred =
+   let kernel = match kernel with
+       | None -> K.create() | Some k -> k in
    Test.make_random_test
-            ~title:(sprintf "%s: k(x,x)" title_tag )
+            ~title:(sprintf "%s (%s): k(x,x)"  title_tag qualifier)
             ~nb_runs:trials
             (Gen.make_float min_float max_float)
-            (fun x -> test ?kernel ~equal_to:(fun x _ -> equal_to x) x x)
-            [ Spec.always ==> fun cmp -> cmp = 0 ]
- let for_k_x_x' ?kernel ?(trials=default_trials) ~title_tag ~equal_to =
+            (eval_x_x kernel)
+            [ Spec.always => fun (x,actual) -> pred ~actual x ]
+let for_k_x_x' ?kernel ?(trials=default_trials) ~qualifier ~title_tag ~pred =
+   let kernel = match kernel with
+       | None -> K.create() | Some k -> k in
    Test.make_random_test
-            ~title:(sprintf "%s: k(x,x')" title_tag)
+            ~title:(sprintf "%s (%s) : k(x,x') " title_tag qualifier)
             ~nb_runs:trials
             (Gen.zip2 (Gen.make_float min_float max_float)
                    (Gen.make_float min_float max_float))
-            (fun (x, x') -> test ?kernel ~equal_to x x')
-            [ Spec.always ==> fun cmp -> cmp = 0 ]
+            (fun (x,x') -> eval kernel x x')
+            [ Spec.always => fun ((x,x'), actual) ->
+              pred ~actual x x']
+
+let symmetric ?kernel ?trials ~title_tag ~pred =
+   let kernel = match kernel with
+       | None -> K.create() | Some k -> k in
+  for_k_x_x' ~kernel ?trials ~qualifier:"symmetric" ~title_tag
+  ~pred:(fun ~actual x x' -> Float.equals (K.covar kernel x' x) actual)
+
+let for_weighted_k_x_x' ?kernel ?(trials=default_trials) 
+  ~qualifier ~title_tag ~pred =
+   let kernel = match kernel with
+       | None -> K.create() | Some k -> k in
+   Test.make_random_test
+            ~title:(sprintf "%s (%s) : k(x,x') " title_tag qualifier)
+            ~nb_runs:trials
+            (Gen.zip2 (Gen.make_float min_float max_float)
+                   (Gen.make_float min_float max_float))
+            (fun (x,x') -> eval kernel x x')
+            [ Spec.always => fun ((x,x'), actual) ->
+              pred ~actual x x']
+
+
+(*      
+let positive_semidefinite ?kernel ?trials ~title_tag =
+  for_k_x_x' ?kernel ?trials ~qualifier:"symmetric" ~title_tag
+  ~pred:(fun ~actual x x' -> pred ~actual x x' && pred ~actual x' x)
+*)
+
 
 end
 
-module Test_params = struct
-module type S =
-sig
-  val equal_to : float -> float -> float
-  val title_tag : string
-end
-
-end
-module Make(K: Kernel.S)(T:Test_params.S) = 
+(*
+module Make(K: Kernel.S)(T:Test_params(K).S) =
 struct
  module K = Squared_exponential
  module Comparison_test = Comparison_test(K)
@@ -62,7 +124,7 @@ struct
 
 
 end
-
+*)
 let equal_to_one _ _ = 1.0
 
 module Squared_exponential_test = Make
@@ -70,6 +132,7 @@ module Squared_exponential_test = Make
   (struct
     let equal_to = equal_to_one
     let title_tag = "Squared exponential"
+    let opts = None
    end)
 
 module Matern_test = Make
@@ -77,6 +140,7 @@ module Matern_test = Make
   (struct
     let equal_to = equal_to_one
     let title_tag = "Matern"
+    let opts = None
    end)
 
 
@@ -85,6 +149,7 @@ module Brownian_test = Make
   (struct
     let equal_to = Float.min
     let title_tag = "Brownian"
+    let opts = None
    end)
 
 module Periodic_test = Make
@@ -92,13 +157,14 @@ module Periodic_test = Make
   (struct
     let equal_to = equal_to_one
     let title_tag = "Periodic"
+    let opts = None
    end)
 
 
 module Linear_test = Make
   (Linear)
   (struct
-    let args = Some (Linear.Optional_args.make ~bias:0.0 ())
+    let opts = some @@ Linear.Optional_args.make ~bias:0.0 ()
     let equal_to = 1.0
     let title_tag = "Periodic"
    end)
