@@ -1,5 +1,6 @@
 module Std =
 struct
+  module Logger = Covar_logger
   module Float = Covar_float
   module Instance = Covar_instance
   module Bessel = Covar_bessel

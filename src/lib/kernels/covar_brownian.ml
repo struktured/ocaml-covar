@@ -17,7 +17,7 @@ struct
   module Instance = Instance.Float
   type t = Optional_args.t
   include Kernel.Create(Optional_args)
-  let covar (t:t) x y = Float.min x y
+  let covar (t:t) x y = Float.min (Float.abs x) (Float.abs y)
 end
 
 include Nonstationary

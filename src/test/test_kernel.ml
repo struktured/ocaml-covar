@@ -1,5 +1,4 @@
 open Kaputt.Abbreviations
-open Printf
 module Array = Core.Std.Array
 open Covar.Std
 open Covar_kernels.Std
@@ -8,11 +7,20 @@ sig
 include Kernel.S with
   module Instance = Float
 end
-
+let sprintf = Printf.sprintf
 let some x = Some x
 
-let debug () = true
+let debug () = false
 
+let printf = Logger.info
+
+let _ = begin Gsl_error.handler := function
+| Gsl_error.EOVRFLW
+| Gsl_error.EUNDRFLW ->
+  (fun message -> printf "(over|under)flow condition: %s\n" message)
+| e -> fun message -> failwith (sprintf "Gsl_error(%s): %s"
+        (Gsl_error.strerror e) message)
+end
 module Predicates =
 struct
 
@@ -45,7 +53,6 @@ struct
 module type S =
 sig
   val kernel_name : string
-  val test_name : string
   val opts : K.Optional_args.t option
 end
 end
@@ -94,8 +101,9 @@ let positive_k_x_x ?kernel ?trials ~kernel_name =
    ~kernel_name ~pred:(Predicates.(to_one_arg positive))
 let for_k_x_x' ?kernel ?(trials=default_trials) 
    ~kernel_name ~test_name ~pred =
+   if debug () then printf "[for_k_x_x'] kernel=%s\n" kernel_name;
    let kernel = match kernel with
-       | None -> K.create() | Some k -> k in
+       | None -> K.create() | Some k -> k in begin
    Test.make_random_test
             ~title:(sprintf "%s (%s) : k(x,x') " kernel_name test_name)
             ~nb_runs:trials
@@ -104,8 +112,9 @@ let for_k_x_x' ?kernel ?(trials=default_trials)
             (fun (x,x') -> eval ~test_name ~kernel_name kernel x x')
             [ Spec.always => fun ((x,x'), actual) ->
               pred ~actual x x']
-
+    end
 let symmetric ?kernel ?trials ~kernel_name =
+   if debug() then printf "[symmetric] kernel_name=%s\n" kernel_name;
    let kernel = match kernel with
        | None -> K.create() | Some k -> k in
   for_k_x_x' ~kernel ?trials ~test_name:"symmetric" ~kernel_name
@@ -137,20 +146,6 @@ let positive_semidefinitive ?kernel ?trials ~kernel_name =
 
 end
 
-(*
-module Make(K: Kernel.S)(T:Test_params(K).S) =
-struct
- module K = Squared_exponential
- module Comparison_test = Comparison_test(K)
- let kernel = K.create ()
- let one_when_same =
-   Comparison_test.for_k_x_x' ~kernel
-      ?trials:None ~kernel_name:T.kernel_name ~equal_to:T.equal_to
- let tests = [one_when_same]
-
-
-end
-*)
 let equal_to_one _ _ = 1.0
 
 module Make_test_suite
@@ -161,10 +156,11 @@ module Test_builder = Make_test_builder(K)
 let kernel = K.create ?opt:Test_params.opts ()
 let trials = None 
 let kernel_name = Test_params.kernel_name
-let test_name = Test_params.test_name
 let positive_k_x_x_test = Test_builder.positive_k_x_x
   ~kernel ?trials ~kernel_name
-let symmetric_test = Test_builder.symmetric
+let symmetric_test = 
+   if debug () then printf "[symmetric_test] kerenel=%s" kernel_name;
+    Test_builder.symmetric
   ~kernel ?trials ~kernel_name
 let positive_semidef_test = Test_builder.positive_semidefinitive
   ~kernel ?trials ~kernel_name
@@ -176,7 +172,6 @@ module Squared_exponential_test = Make_test_suite
   (struct
     let equal_to = equal_to_one
     let kernel_name = "Squared exponential"
-    let test_name = "equal to one"
     let opts = None
    end)
 
@@ -185,7 +180,6 @@ module Matern_test = Make_test_suite
   (struct
     let equal_to = equal_to_one
     let kernel_name = "Matern"
-    let test_name = "equal_to_one"
     let opts = None
    end)
 
@@ -196,15 +190,13 @@ module Brownian_test = Make_test_suite
     let equal_to = Float.min
     let kernel_name = "Brownian"
     let opts = None
-    let test_name = "covar(x,y)=min(x,y)"
    end)
 
 module Periodic_test = Make_test_suite
   (Periodic)
   (struct
     let equal_to = equal_to_one
-    let kernel_name = "Peridic"
-    let test_name = "equal_to_one"
+    let kernel_name = "Periodic"
     let opts = None
    end)
 
@@ -215,8 +207,13 @@ module Linear_test = Make_test_suite
     let opts = some @@ Linear.Optional_args.make ~bias:0.0 ()
     let equal_to = 1.0
     let kernel_name = "Linear"
-    let test_name = "equal_to_one"
    end)
 
 let () = Kaputt.Abbreviations.Test.run_tests @@
-    List.concat [Squared_exponential_test.tests (* ; Matern_test.tests *)]
+List.concat [
+Squared_exponential_test.tests;
+Matern_test.tests;
+Periodic_test.tests;
+Brownian_test.tests;
+Linear_test.tests]
+

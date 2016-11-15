@@ -1,6 +1,7 @@
 # OASIS_START
-# DO NOT EDIT (digest: dfdf831367936d75b3f87f4284129646)
+# DO NOT EDIT (digest: 09089c7d34203ac07166d90c236b9433)
 Covar_optional_args
+Covar_logger
 Covar_float
 Covar_gamma
 Covar_bessel

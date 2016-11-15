@@ -31,7 +31,11 @@ let covar t x = if x = 0.0 then t.amp_sqr else
   let open Instance in
     t.coeff *
     x ** t.v *
+    begin
+    Logger.info "[matern covar] bessel_k (v=%f) (x=%f)\n" t.v x;
+    flush stdout;
     K_v.bessel_k ~nu:t.v x
+    end
 end
 
 module Nonstationary : Kernel.Nonstationary.S with
