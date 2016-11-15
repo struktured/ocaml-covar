@@ -200,6 +200,14 @@ module Periodic_test = Make_test_suite
     let opts = None
    end)
 
+module Temporal_test = Make_test_suite
+  (Temporal)
+  (struct
+    let equal_to = equal_to_one
+    let kernel_name = "Temporal"
+    let opts = None
+   end)
+
 
 module Linear_test = Make_test_suite
   (Linear)
@@ -215,5 +223,6 @@ Squared_exponential_test.tests;
 Matern_test.tests;
 Periodic_test.tests;
 Brownian_test.tests;
+Temporal_test.tests;
 Linear_test.tests]
 
