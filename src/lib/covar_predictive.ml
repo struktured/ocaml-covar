@@ -1,7 +1,6 @@
 (** Kerned-based predictive functions *)
-open Core.Std
 module Vec = Lacaml_D.Vec
-
+module Float=Covar_float
 (** A predictive kernel function. Requires a kernel type definition *)
 module type S =
 sig
@@ -41,7 +40,7 @@ struct
 
   let predict (t:t) (x:Instance.t) =
     let instances : Float.t array = Instance_buffer.to_array t.instances in instances |>
-      Array.map ~f:(fun x' -> Kernel.covar t.kernel x' x) |>
+      Array.map (fun x' -> Kernel.covar t.kernel x' x) |>
       Vec.of_array |>
       Lacaml_D.dot (Weights_buffer.to_array t.weights |> Vec.of_array)
 

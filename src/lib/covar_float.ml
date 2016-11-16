@@ -1,16 +1,22 @@
 module type S =
 sig
-  include module type of Core.Std.Float
+  include module type of CCFloat
   val two : t
 end
 
-module Core_float (* : S *) =
+module CCFloat (* : S *) =
 struct
- include Core.Std.Float
+ include CCFloat
  let two = 2.
+ open CCFloat.Infix
+ let (+) = (+.)
+ let (-) = (-.)
+ let ( * ) = ( *.)
+ let (/) = (/.)
+ let one = 1.
 end
 
-include Core_float
+include CCFloat
 
 let default_epsilon = 1e-5
 
@@ -19,3 +25,8 @@ let compare ?(epsilon=default_epsilon) =
 
 let equals ?epsilon x x' =
   match compare ?epsilon x x' with 0 -> true | _ -> false
+
+
+
+
+

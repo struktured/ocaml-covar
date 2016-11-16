@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: fa427535d89df1f73313bd6adb47bbaa)
+# DO NOT EDIT (digest: e5f9e3cc5a32ce0104630534605b53ff)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -18,7 +18,6 @@ true: annot, bin_annot
 "src/lib/covar.cmxs": use_covar
 <src/lib/*.ml{,i,y}>: package(containers)
 <src/lib/*.ml{,i,y}>: package(containers.data)
-<src/lib/*.ml{,i,y}>: package(core)
 <src/lib/*.ml{,i,y}>: package(gsl)
 <src/lib/*.ml{,i,y}>: package(lacaml)
 <src/lib/*.ml{,i,y}>: package(ppx_deriving)
@@ -29,7 +28,6 @@ true: annot, bin_annot
 "src/lib/kernels/kernels.cmxs": use_kernels
 <src/lib/kernels/*.ml{,i,y}>: package(containers)
 <src/lib/kernels/*.ml{,i,y}>: package(containers.data)
-<src/lib/kernels/*.ml{,i,y}>: package(core)
 <src/lib/kernels/*.ml{,i,y}>: package(gsl)
 <src/lib/kernels/*.ml{,i,y}>: package(lacaml)
 <src/lib/kernels/*.ml{,i,y}>: package(ppx_deriving)

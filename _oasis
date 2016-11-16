@@ -33,7 +33,7 @@ Library covar
   Path:               src/lib
   Modules:            Covar_optional_args, Covar_logger, Covar_float, Covar_gamma, Covar_bessel, Covar_trig,
                       Covar_instance, Covar_kernel, Covar_predictive, Covar_loss, Covar
-  BuildDepends:       threads, core, containers, containers.data, lacaml, gsl, ppx_deriving,
+  BuildDepends:       threads, containers, containers.data, lacaml, gsl, ppx_deriving,
                       ppx_deriving.make, ppx_deriving.show
   XMETADescription:   Covariance functions for machine learning.
 
@@ -59,7 +59,7 @@ Executable test_kernel
   Path:               src/test
   Build$:             flag(tests) || flag(all)
   MainIs:             test_kernel.ml
-  BuildDepends:       kaputt, covar.kernels, covar.test
+  BuildDepends:       kaputt, core, covar.kernels, covar.test
 
 Test test_kernel
   Command: $test_kernel

@@ -13,7 +13,7 @@ build: [
 ]
 install: ["ocaml" "setup.ml" "-install"]
 remove: [
-  ["ocaml" "%{etc}%/covar/_oasis_remove_.ml" "%{etc}%/covar"]
+  ["ocamlfind" "remove" "covar"]
 ]
 build-test: [
   ["ocaml" "setup.ml" "-configure" "--enable-tests"]
@@ -23,7 +23,6 @@ build-test: [
 depends: [
   "base-threads"
   "containers"
-  "core"
   "gsl"
   "lacaml"
   "ocamlbuild" {build}

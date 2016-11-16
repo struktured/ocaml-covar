@@ -1,6 +1,5 @@
 module Kernel = Covar_kernel
 module Instance = Covar_instance
-module Array = Core.Std.Array
 
 module Homogeneous_optional_args(K : Kernel.S) =
 struct
@@ -19,7 +18,7 @@ struct
   module Instance = Instance.Array(K.Instance)
   let covar t x x' =
     let dists = Array.mapi
-        ~f:(fun i k -> K.covar k x.(i) x'.(i)) t.kernels
+        (fun i k -> K.covar k x.(i) x'.(i)) t.kernels
           |> Lacaml_D.Vec.of_array in
     Lacaml_D.dot t.weights dists
 end

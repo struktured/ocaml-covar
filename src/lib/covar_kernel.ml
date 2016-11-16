@@ -1,4 +1,4 @@
-open Core.Std
+module Float = Covar_float
 type vec = Lacaml_float64.vec
 module Mat = Lacaml_D.Mat
 type mat = Lacaml_D.mat
@@ -8,10 +8,11 @@ module Create = Optional_args.Create
 
 module Gamma = Covar_gamma
 module Array = struct
-include Core.Std.Array
-let map2i t1 t2 ~f = let cnt = ref 0 in Array.map2_exn t1 t2
-  ~f:(fun e1 e2 -> let i = !cnt in
-    let res = f i e1 e2 in cnt := i + 1; res)
+include CCArray
+let map2i t1 t2 ~f = let cnt = ref 0 in map2
+  (fun e1 e2 -> let i = !cnt in
+    let res = f i e1 e2 in cnt := i + 1; res) t1 t2
+
 end
 
 module Nonstationary =
