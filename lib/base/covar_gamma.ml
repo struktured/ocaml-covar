@@ -5,7 +5,7 @@ end
 
 module Gsl_gamma : S =
 struct
- let gamma = Gsl_sf.gamma
+ let gamma = Gsl.Sf.gamma
 end
 
 include Gsl_gamma

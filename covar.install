@@ -1,4 +1,0 @@
-bin: [
-  "?_build/src/test/test_kernel.byte" {"test_kernel"}
-  "?_build/src/test/test_kernel.native" {"test_kernel"}
-]

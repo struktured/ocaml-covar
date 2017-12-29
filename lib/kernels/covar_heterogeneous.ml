@@ -1,8 +1,7 @@
-module Kernel = Covar_kernel
-module Instance = Covar_instance
-module Float = Covar_float
-module Mat = Kernel.Mat
+open !Import
+
 module Homogeneous = Covar_homogeneous
+module Mat = Kernel.Mat
 
 module Heterogeneous_optional_args
   (K1 : Kernel.S )
@@ -10,7 +9,7 @@ module Heterogeneous_optional_args
 struct
 type t = {weights:Kernel.mat; kernel1: K1.t array; kernel2 : K2.t array}
            [@@deriving make]
-let default = {weights=Lacaml_D.Mat.empty; kernel1=[||];kernel2=[||]}
+let default = {weights=Lacaml.D.Mat.empty; kernel1=[||];kernel2=[||]}
 end
 
 module Heterogeneous_optional_array_args
@@ -21,7 +20,7 @@ module Heterogeneous_optional_array_args
 struct
 type t = {weights:Kernel.mat; kernel1: K1.t array; kernel2 : K2.t array}
            [@@deriving make]
-let default = {weights=Lacaml_D.Mat.empty; kernel1=[||];kernel2=[||]}
+let default = {weights=Lacaml.D.Mat.empty; kernel1=[||];kernel2=[||]}
 end
 
 
@@ -91,7 +90,7 @@ module Normalized_heterogeneous_optional_args
 struct
 type t = {weights:Kernel.mat; kernel1: K1.t array; kernel2 : K2.t array}
            [@@deriving make]
-let default = {weights=Lacaml_D.Mat.empty; kernel1=[||];kernel2=[||]}
+let default = {weights=Lacaml.D.Mat.empty; kernel1=[||];kernel2=[||]}
 end
 
 

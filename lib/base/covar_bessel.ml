@@ -8,7 +8,7 @@ end
 
 module Gsl_bessel : S =
 struct
- let bessel_k ~nu = Gsl_sf.bessel_Knu nu
+ let bessel_k ~nu = Gsl.Sf.bessel_Knu nu
 end
 
 (** Uses ocaml-gsl as backend for now *)

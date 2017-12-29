@@ -1,10 +1,9 @@
-module Kernel = Covar_kernel
-module Instance = Covar_instance
+open !Import
 
 module Homogeneous_optional_args(K : Kernel.S) =
 struct
   type t = {weights:Kernel.vec; kernels: K.t array} [@@deriving make]
-  let default = {weights=Lacaml_D.Vec.empty; kernels=[||]}
+  let default = {weights=Lacaml.D.Vec.empty; kernels=[||]}
 end
 
 module Make(K : Kernel.S) : Kernel.S with
@@ -19,6 +18,6 @@ struct
   let covar t x x' =
     let dists = Array.mapi
         (fun i k -> K.covar k x.(i) x'.(i)) t.kernels
-          |> Lacaml_D.Vec.of_array in
-    Lacaml_D.dot t.weights dists
+          |> Lacaml.D.Vec.of_array in
+    Lacaml.D.dot t.weights dists
 end

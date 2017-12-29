@@ -1,4 +1,4 @@
-open Covar.Std
+open !Import
 module Isotropic = Kernel.Stationary.Isotropic
 module Squared_exponential_optional_args =
 struct

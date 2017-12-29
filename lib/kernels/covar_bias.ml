@@ -1,4 +1,4 @@
-open Covar.Std
+open !Import
 
 module Bias_optional_args =
 struct

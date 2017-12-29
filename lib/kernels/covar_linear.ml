@@ -1,4 +1,4 @@
-open Covar.Std
+open !Import
 
 module Linear_optional_args =
 struct

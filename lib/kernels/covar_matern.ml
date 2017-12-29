@@ -1,4 +1,5 @@
-open Covar.Std
+open !Import
+
 module Isotropic = Kernel.Stationary.Isotropic
 
 module Matern_optional_args =

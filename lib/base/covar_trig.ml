@@ -10,4 +10,4 @@ let cos = maybe_power ~f:cos
 let sin_sq = sin ~pow:2.0
 let cos_sq = cos ~pow:2.0
 
-let pi = Gsl_math.pi
+let pi = Gsl.Math.pi

@@ -21,7 +21,7 @@ include CCFloat
 let default_epsilon = 1e-5
 
 let compare ?(epsilon=default_epsilon) =
-  Gsl_math.fcmp ~epsilon
+  Gsl.Math.fcmp ~epsilon
 
 let equals ?epsilon x x' =
   match compare ?epsilon x x' with 0 -> true | _ -> false

@@ -1,4 +1,4 @@
-open Covar.Std
+open !Import
 
 module Temporal_optional_args =
 struct

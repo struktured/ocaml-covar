@@ -1,4 +1,4 @@
-open Covar.Std
+open !Import
 
 module Brownian_optional_args =
 struct

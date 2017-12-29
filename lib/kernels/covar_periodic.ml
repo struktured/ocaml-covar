@@ -1,4 +1,5 @@
-open Covar.Std
+open !Import
+
 module Isotropic = Kernel.Stationary.Isotropic
 module Periodic_optional_args =
 struct
