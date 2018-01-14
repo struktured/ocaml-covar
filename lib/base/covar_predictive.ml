@@ -13,7 +13,7 @@ end
 
 (** A buffered version of a predictive function, allowing
     adding of support instances to the model dynamically. *)
-module Buffered = 
+module Buffered =
 struct
 module type S =
 sig
@@ -21,7 +21,9 @@ sig
   val empty : ?init_buffer_size:int -> ?bounded_buffer:bool -> Kernel.t -> t
   val add_support : t -> weight:float -> Instance.t -> t
 end
-module Make(Kernel:Covar_kernel.S with module Instance = Covar_instance.Float)(Predictor:S) :
+
+module Make(Kernel:Covar_kernel.S with
+             module Instance = Covar_instance.Float)(Predictor:S) :
   S with module Kernel = Kernel =
 struct
   module Kernel = Kernel
@@ -39,7 +41,8 @@ struct
       ~kernel
 
   let predict (t:t) (x:Instance.t) =
-    let instances : Float.t array = Instance_buffer.to_array t.instances in instances |>
+    let instances : Float.t array =
+      Instance_buffer.to_array t.instances in instances |>
       Array.map (fun x' -> Kernel.covar t.kernel x' x) |>
       Vec.of_array |>
       Lacaml.D.dot (Weights_buffer.to_array t.weights |> Vec.of_array)
