@@ -12,6 +12,7 @@
   (library_flags (-linkall))
   (libraries (
     covar_base covar_kernels threads async containers containers.data lacaml gsl
+    async_extended
     ))
 ))
 

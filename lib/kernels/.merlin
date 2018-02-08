@@ -4,6 +4,7 @@ FLG -open Covar_kernels__ -w -40 -unsafe-string
 FLG -ppx '/home/carm/projects/ocaml-covar/_build/default/.ppx/ppx_deriving.make+ppx_jane+ppx_deriving.show/ppx.exe --as-ppx --cookie '\''library-name="covar_kernels"'\'''
 PKG base
 PKG base.caml
+PKG base.md5
 PKG base.shadow_stdlib
 PKG bigarray
 PKG bin_prot

@@ -1,32 +1,25 @@
+open Base
 module type S =
 sig
-  include module type of CCFloat
+  include module type of Float
   val two : t
 end
 
-module CCFloat (* : S *) =
+module Float0 (* : S *) =
 struct
- include CCFloat
+ include Float
  let two = 2.
- open CCFloat.Infix
- let (+) = (+.)
- let (-) = (-.)
- let ( * ) = ( *.)
- let (/) = (/.)
+ open Float
  let one = 1.
 end
 
-include CCFloat
-
+include Float0
 let default_epsilon = 1e-5
-
+(*
 let compare ?(epsilon=default_epsilon) =
   Gsl.Math.fcmp ~epsilon
 
 let equals ?epsilon x x' =
   match compare ?epsilon x x' with 0 -> true | _ -> false
 
-
-
-
-
+*)

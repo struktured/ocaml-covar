@@ -12,7 +12,14 @@ val predict : t -> Instance.t -> float
 end
 
 (** A buffered version of a predictive function, allowing
-    adding of support instances to the model dynamically. *)
+    adding of support instances to the model dynamically.
+
+    The buffer by default is a fixed size ring buffer, effectively
+    causing a sliding window type of behavior.
+
+    A future model might instead keep the N best samples,
+    rather than N last (maybe with redis?)
+*)
 module Buffered =
 struct
 module type S =
@@ -23,7 +30,7 @@ sig
 end
 
 module Make(Kernel:Covar_kernel.S with
-             module Instance = Covar_instance.Float)(Predictor:S) :
+             module Instance = Covar_instance.Float) :
   S with module Kernel = Kernel =
 struct
   module Kernel = Kernel
@@ -32,7 +39,9 @@ struct
   module Weights_buffer = CCRingBuffer.Make(Covar_instance.Float)
   let default_buffer_size = 1000
   let default_bounded_buffer = false
-  type t = {weights:Weights_buffer.t; instances:Instance_buffer.t; kernel:Kernel.t} [@@deriving make]
+  type t = {weights:Weights_buffer.t;
+            instances:Instance_buffer.t;
+            kernel:Kernel.t} [@@deriving make]
 
   let empty ?(init_buffer_size=default_buffer_size)
     ?(bounded_buffer=default_bounded_buffer) kernel = make
