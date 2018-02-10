@@ -1,3 +1,4 @@
+include Base
 module Std =
 struct
   module Logger = Covar_logger

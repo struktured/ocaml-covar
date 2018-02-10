@@ -3,6 +3,8 @@ module type S =
 sig
   include module type of Float
   val two : t
+
+  val dummy : t
 end
 
 module Float0 (* : S *) =
@@ -23,3 +25,5 @@ let equals ?epsilon x x' =
   match compare ?epsilon x x' with 0 -> true | _ -> false
 
 *)
+
+let dummy = 0.0
