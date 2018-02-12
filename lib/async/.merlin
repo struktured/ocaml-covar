@@ -24,6 +24,7 @@ PKG bytes
 PKG command_rpc
 PKG containers
 PKG containers.data
+PKG containers.monomorphic
 PKG core
 PKG core_extended
 PKG core_kernel
@@ -71,5 +72,6 @@ PKG threads.posix
 PKG typerep
 PKG unix
 PKG variantslib
+S .
 S ../base
 S ../kernels

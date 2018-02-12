@@ -12,6 +12,7 @@ PKG bin_prot.shape
 PKG bytes
 PKG containers
 PKG containers.data
+PKG containers.monomorphic
 PKG fieldslib
 PKG gsl
 PKG lacaml
@@ -33,4 +34,5 @@ PKG threads.posix
 PKG typerep
 PKG unix
 PKG variantslib
+S .
 S ../base
