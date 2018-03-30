@@ -4,6 +4,7 @@
   (name covar_base)
   (public_name covar-base)
   (flags (
+    -open Base
     :standard
     -unsafe-string
   ))

@@ -6,14 +6,14 @@ end
 (* Logging facade with optional level paremeter *) 
 module type S =
 sig
- val log  : ?level:Level.t -> ('a, out_channel, unit) format -> 'a
- val info : ('a, Format.formatter, unit) format -> 'a
+ val log  : ?level:Level.t -> ('a, Caml.out_channel, unit) format -> 'a
+ val info : ('a, Caml.Format.formatter, unit) format -> 'a
 end
 
 module Printf : S =
 struct
-  let log ?(level:Level.t option) s = Printf.printf s
-  let info = Format.printf
+  let log ?(level:Level.t option) s = Caml.Printf.printf s
+  let info = Caml.Format.printf
 end
 
 include Printf

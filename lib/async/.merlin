@@ -1,7 +1,7 @@
 B ../../_build/default/lib/async
 B ../../_build/default/lib/base
 B ../../_build/default/lib/kernels
-FLG -open Covar_async -w -40 -unsafe-string
+FLG -open Covar_async -open Core -open Async -w -40 -unsafe-string
 FLG -ppx '/home/carm/projects/ocaml-covar/_build/default/.ppx/ppx_jane+ppx_deriving.make/ppx.exe --as-ppx --cookie '\''library-name="covar_async"'\'''
 PKG async
 PKG async_extended

@@ -12,4 +12,5 @@ struct
   module Periodic = Covar_periodic
   module Brownian = Covar_brownian
   module Bias = Covar_bias
+  module Generic = Covar_generic
 end

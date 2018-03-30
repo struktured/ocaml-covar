@@ -43,8 +43,9 @@ struct
             instances:Instance_buffer.t;
             kernel:Kernel.t} [@@deriving make]
 
-  let empty ?(init_buffer_size=default_buffer_size)
-    ?(bounded_buffer=default_bounded_buffer) kernel = make
+  let empty
+      ?(init_buffer_size=default_buffer_size)
+      ?(bounded_buffer=default_bounded_buffer) kernel = make
       ~weights:(Weights_buffer.create init_buffer_size)
       ~instances:(Instance_buffer.create init_buffer_size)
       ~kernel
@@ -52,12 +53,12 @@ struct
   let predict (t:t) (x:Instance.t) =
     let instances : Float.t array =
       Instance_buffer.to_array t.instances in instances |>
-      Array.map (fun x' -> Kernel.covar t.kernel x' x) |>
+      Array.map ~f:(fun x' -> Kernel.covar t.kernel x' x) |>
       Vec.of_array |>
       Lacaml.D.dot (Weights_buffer.to_array t.weights |> Vec.of_array)
 
-  let add_support (t:t) ~weight instance =
-    if weight = 0. then t else
+  let add_support (t:t) ~(weight:float) instance =
+    if Float.equal weight 0. then t else
       begin
         Weights_buffer.push_back t.weights weight;
         Instance_buffer.push_back t.instances instance;

@@ -25,7 +25,7 @@ struct
     }
 end
 
-module Generic(I:Instance.S) :
+module Make(I:Instance.S) :
   Kernel.S with
   module Instance = Instance.Array(I) and
   module Optional_args = Optional_args(I) =

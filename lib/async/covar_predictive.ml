@@ -5,7 +5,8 @@ open !Import
 module Make(Kernel:Kernel.S with module Instance = Instance.Float) =
 struct
 
-  module Predictive = Covar_base.Covar_predictive.Buffered.Make(Kernel)
+  module Predictive =
+    Covar_base.Covar_predictive.Buffered.Make(Kernel)
 
   type instance = Kernel.Instance.t (*[@@deriving sexp]*)
   type prediction = {value:float} [@@deriving sexp]
@@ -20,7 +21,7 @@ struct
       ?bounded_buffer:None
       kernel
 
-  let predict t reader =
+  let predict t (reader:reader) =
     Pipe.folding_map reader ~init:t ~f:
       (fun t x ->
           let y =

@@ -3,7 +3,7 @@ module type S = sig type t val dummy : t end
 
 module Float (* : S with type t = float *) =
 struct
-  include Covar_float
+  include (Covar_float : Covar_float.S)
   let dummy = 0.0
 end
 

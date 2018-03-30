@@ -20,7 +20,7 @@ struct
  module Instance = Instance
  let loss t x ~predicted ~actual =
    let open Float in
-   (predicted - actual) ** 2.
+   (predicted - actual) **. 2.
 end
 
 (** Hinge loss error function. For classification. *)

@@ -2,15 +2,8 @@ open Core (* TODO put in jbuilder *)
 open !Import
 open Async_extended
 
-let file_reader file ~f =
-  Reader.with_file
-    ?buf_len:None
-    ?exclusive:None
-    file
-    ~f
-
-let from_reader reader :
-float array Pipe.Reader.t Deferred.t =
+let from_reader ~instance_of_string reader :
+'instance array Pipe.Reader.t Deferred.t =
   Csv.fold_reader_to_pipe
     ?strip:None
     ~skip_lines:1
@@ -21,15 +14,43 @@ float array Pipe.Reader.t Deferred.t =
     Pipe.map pipe ~f:(
       fun x ->
       Csv.Row.to_array x |>
-      Array.map ~f:Float.of_string
+      Array.map ~f:instance_of_string
     )
   |> return
 
 
 module Predictive = Covar_predictive
-module Input = Instance.Float_array
+
+module type OF_STRING_INSTANCE =
+sig
+  include Instance.S
+
+  val of_string : string -> t
+end
+
+module Instance = Instance.Array(Instance.Float)
+
+module Kernel = Generic.Make(Instance)
+
+module P = Predictive.Make(Kernel)
+
 let train ~file =
-  file_reader file ~f:from_reader
-  
-
-
+  let file_reader file ~f =
+    Reader.with_file
+      ?buf_len:None
+      ?exclusive:None
+      file
+      ~f in
+  file_reader file
+    ~f:(from_reader
+          ~instance_of_string:Float.of_string
+       ) >>=
+  fun reader -> return @@
+  Pipe.map reader ~f:
+    (fun row -> row
+    
+    )
+(*
+module Default =
+  Make(struct include Instance.Float let of_string = Float.of_string end)
+*)

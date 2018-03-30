@@ -4,6 +4,8 @@
   (name covar_async)
   (public_name covar-async)
   (flags (
+    -open Core
+    -open Async
     :standard
     -unsafe-string
   ))

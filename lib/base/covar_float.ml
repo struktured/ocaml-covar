@@ -1,10 +1,10 @@
-open Base
 module type S =
 sig
   include module type of Float
   val two : t
 
   val dummy : t
+  val default_epsilon : t
 end
 
 module Float0 (* : S *) =
@@ -17,6 +17,7 @@ end
 
 include Float0
 let default_epsilon = 1e-5
+
 (*
 let compare ?(epsilon=default_epsilon) =
   Gsl.Math.fcmp ~epsilon
