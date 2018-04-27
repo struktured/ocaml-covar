@@ -3,7 +3,7 @@ struct
 type t = [`Trace | `Debug | `Info | `Warn | `Error]
 end
 
-(* Logging facade with optional level paremeter *) 
+(* Logging facade with optional level parameter *)
 module type S =
 sig
  val log  : ?level:Level.t -> ('a, Caml.out_channel, unit) format -> 'a
@@ -12,7 +12,7 @@ end
 
 module Printf : S =
 struct
-  let log ?(level:Level.t option) s = Caml.Printf.printf s
+  let log ?(level:_) s = Caml.Printf.printf s
   let info = Caml.Format.printf
 end
 

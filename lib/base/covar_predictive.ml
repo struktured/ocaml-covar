@@ -25,7 +25,7 @@ struct
 module type S =
 sig
   include S
-  val empty : ?init_buffer_size:int -> ?bounded_buffer:bool -> Kernel.t -> t
+  val empty : ?init_buffer_size:int -> Kernel.t -> t
   val add_support : t -> weight:float -> Instance.t -> t
 end
 
@@ -45,7 +45,7 @@ struct
 
   let empty
       ?(init_buffer_size=default_buffer_size)
-      ?(bounded_buffer=default_bounded_buffer) kernel = make
+      kernel = make
       ~weights:(Weights_buffer.create init_buffer_size)
       ~instances:(Instance_buffer.create init_buffer_size)
       ~kernel
