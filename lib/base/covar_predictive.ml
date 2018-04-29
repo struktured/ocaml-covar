@@ -1,14 +1,15 @@
 (** Kerned-based predictive functions *)
 module Vec = Lacaml.D.Vec
-module Float=Covar_float
+module Float = Covar_float
 (** A predictive kernel function. Requires a kernel type definition *)
 module type S =
 sig
 type t
 module Kernel : Covar_kernel.S
 module Instance = Kernel.Instance
-val predict : t -> Instance.t -> float
+
 (** Given a predictor and an instance, predict the output (target) value. *)
+val predict : t -> Instance.t -> float
 end
 
 (** A buffered version of a predictive function, allowing

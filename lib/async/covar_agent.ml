@@ -32,7 +32,7 @@ module Instance = Instance.Array(Instance.Float)
 
 module Kernel = Generic.Make(Instance)
 
-module P = Predictive.Make(Kernel)
+module P = Predictive.Make(Brownian)
 
 let train ~file =
   let file_reader file ~f =
