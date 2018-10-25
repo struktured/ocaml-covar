@@ -1,17 +1,14 @@
-(jbuild_version 1)
-
-(library (
+(library
   (name covar_kernels)
   (public_name covar-kernels)
-  (flags (
+  (flags
     :standard
     -unsafe-string
-  ))
-  (preprocess (pps (ppx_jane ppx_deriving.make ppx_deriving.show)))
+  )
+  (preprocess (pps ppx_jane ppx_deriving.make ppx_deriving.show))
   (synopsis "Various covariance functions (kernels) in OCaml")
-  (library_flags (-linkall))
-  (libraries (
+  (library_flags -linkall)
+  (libraries
     covar_base lacaml gsl
-    ))
-))
-
+  )
+)

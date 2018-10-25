@@ -18,7 +18,7 @@ module MSE(Instance:Covar_instance.S) :
 struct
  type t
  module Instance = Instance
- let loss t x ~predicted ~actual =
+ let loss _t _x ~predicted ~actual =
    let open Float in
    (predicted - actual) **. 2.
 end
@@ -29,7 +29,7 @@ module Hing_loss(Instance:Covar_instance.S) :
 struct
  type t
  module Instance = Instance
- let loss t x ~predicted ~actual =
+ let loss _t _x ~predicted ~actual =
    let open Float in
    max 0. (1. - actual*predicted)
 end

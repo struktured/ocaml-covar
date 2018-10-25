@@ -19,7 +19,7 @@ struct
   module Instance = Instance.Float
   type t = {bias_sqr:float [@default 0.0];
             amp_sqr:float [@default 1.0];
-            offset:float [@default 0.0]} [@@deriving make]
+            offset:float [@default 0.0]}
 
   let create ?(opt=Optional_args.default) () =
       let open Float in

@@ -2,7 +2,7 @@ open !Import
 
 module Bias_optional_args =
 struct
-  type t = {amplitude:float [@default 1.0] } [@@deriving make]
+  type t = {amplitude:float [@default 1.0]} [@@deriving make]
   let default = make ()
 end
 
@@ -21,7 +21,7 @@ struct
   type t = {amp_sqr:Float.t}
   let create ?(opt=Optional_args.default) () =
     {amp_sqr=opt.amplitude*.opt.amplitude}
-  let covar t (x:Instance.t) = t.amp_sqr
+  let covar t (_x:Instance.t) = t.amp_sqr
 end
 
 module Nonstationary : Kernel.Nonstationary.S with

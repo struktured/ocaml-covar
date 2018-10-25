@@ -5,7 +5,7 @@ module Isotropic = Kernel.Stationary.Isotropic
 module Matern_optional_args =
 struct
     type t = {amplitude:float [@default 1.];bandwidth:float; v:float}
-      [@@deriving make, show]
+    [@@deriving make, show]
     let default = {amplitude=1.0;bandwidth=1.0;v=1.5}
 end
 
@@ -17,7 +17,7 @@ struct
   module Instance = Instance.Float
   module Optional_args = Matern_optional_args
 
-type t = {amp_sqr:float; base:float; coeff:float; v:float} [@@deriving show]
+type t = {amp_sqr:float; base:float; coeff:float; v:float}
 
 let create ?(opt=Optional_args.default) () =
    let open Instance in

@@ -1,14 +1,14 @@
 
 build:
-	jbuilder build
+	dune build
 
 clean:
-	jbuilder clean
+	dune clean
 
 install: build
-	jbuilder install
+	dune install
 
 
-.phony:
-	build
+.PHONY:
+	build clean
 

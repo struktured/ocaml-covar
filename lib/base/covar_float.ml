@@ -11,7 +11,6 @@ module Float0 (* : S *) =
 struct
  include Float
  let two = 2.
- open Float
  let one = 1.
 end
 

@@ -12,7 +12,7 @@ end
 
 module Printf : S =
 struct
-  let log ?(level:_) s = Caml.Printf.printf s
+  let log ?level:_ s = Caml.Printf.printf s
   let info = Caml.Format.printf
 end
 

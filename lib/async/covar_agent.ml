@@ -1,4 +1,3 @@
-open Core (* TODO put in jbuilder *)
 open !Import
 open Async_extended
 
@@ -32,7 +31,7 @@ module Instance = Instance.Array(Instance.Float)
 
 module Kernel = Generic.Make(Instance)
 
-module P = Predictive.Make(Kernel)
+(*module P = Predictive.Make(Kernel.cova)*)
 
 let train ~file =
   let file_reader file ~f =
@@ -48,7 +47,6 @@ let train ~file =
   fun reader -> return @@
   Pipe.map reader ~f:
     (fun row -> row
-    
     )
 (*
 module Default =

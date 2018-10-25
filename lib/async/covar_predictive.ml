@@ -1,7 +1,4 @@
-open Core
-open Async
-open !Import
-
+open! Import
 module Make(Kernel:Kernel.S with module Instance = Instance.Float) =
 struct
 
@@ -18,7 +15,6 @@ struct
     let kernel = Kernel.create ?opt:kernel_opt () in
     Predictive.empty
       ?init_buffer_size:None
-      ?bounded_buffer:None
       kernel
 
   let predict t (reader:reader) =

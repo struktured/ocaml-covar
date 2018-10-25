@@ -17,7 +17,7 @@ struct
   module Instance = Instance.Float
 
   type t = {amp_sqr:float [@default 1.0]; period:float [@default 0.5];
-            bandwidth_sqr:float [@default 1.0]} [@@deriving make, show]
+            bandwidth_sqr:float [@default 1.0]}
 
   let create ?(opt=Optional_args.default) () =
     let open Float in

@@ -1,20 +1,18 @@
-(jbuild_version 1)
-
-(library (
+(library
   (name covar_async)
   (public_name covar-async)
-  (flags (
+  (flags
     -open Core
     -open Async
     :standard
     -unsafe-string
-  ))
-  (preprocess (pps (ppx_jane ppx_deriving.make)))
+  )
+  (preprocess (pps ppx_jane ppx_deriving.make))
   (synopsis "Covariance functions in OCaml")
-  (library_flags (-linkall))
-  (libraries (
+  (library_flags -linkall)
+  (libraries
     covar_base covar_kernels threads async containers containers.data lacaml gsl
     async_extended
-    ))
-))
+  )
+)
 

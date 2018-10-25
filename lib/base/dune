@@ -1,18 +1,16 @@
-(jbuild_version 1)
-
-(library (
+(library
   (name covar_base)
   (public_name covar-base)
-  (flags (
+  (flags
     -open Base
     :standard
     -unsafe-string
-  ))
-  (preprocess (pps (ppx_jane ppx_deriving.make)))
+  )
+  (preprocess (pps ppx_jane ppx_deriving.make))
   (synopsis "Covariance functions in OCaml")
-  (library_flags (-linkall))
-  (libraries (
+  (library_flags -linkall)
+  (libraries
     threads containers containers.data lacaml gsl
-    ))
-))
+  )
+)
 
