@@ -9,7 +9,7 @@ struct
 end
 
 
-module Nonstationary  :
+module Nonstationary :
 Kernel.S with
  module Optional_args = Linear_optional_args and
  module Instance = Instance.Float =

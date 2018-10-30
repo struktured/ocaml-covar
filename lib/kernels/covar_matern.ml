@@ -5,7 +5,7 @@ module Isotropic = Kernel.Stationary.Isotropic
 module Matern_optional_args =
 struct
     type t = {amplitude:float [@default 1.];bandwidth:float; v:float}
-    [@@deriving make, show]
+    [@@deriving make, sexp]
     let default = {amplitude=1.0;bandwidth=1.0;v=1.5}
 end
 
@@ -17,7 +17,7 @@ struct
   module Instance = Instance.Float
   module Optional_args = Matern_optional_args
 
-type t = {amp_sqr:float; base:float; coeff:float; v:float}
+  type t = {amp_sqr:float; base:float; coeff:float; v:float} [@@deriving sexp]
 
 let create ?(opt=Optional_args.default) () =
    let open Instance in
@@ -28,13 +28,14 @@ let create ?(opt=Optional_args.default) () =
    let coeff = pow_over_fact * amp_sqr in
    let v = opt.v in {amp_sqr;base;coeff;v}
 
-let covar t x = if x = 0.0 then t.amp_sqr else
+let covar t x =
+  if Float.equal x 0.0 then t.amp_sqr else
   let open Instance in
     t.coeff *
     x ** t.v *
     begin
     Logger.info "[matern covar] bessel_k (v=%f) (x=%f)\n" t.v x;
-    flush stdout;
+    Caml.(flush stdout);
     K_v.bessel_k ~nu:t.v x
     end
 end

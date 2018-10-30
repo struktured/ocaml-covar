@@ -63,4 +63,4 @@ S /home/cep1/.opam/4.06.1/lib/variantslib
 S ../base
 S .
 FLG -ppx '/home/cep1/projects/ocaml-covar/_build/default/.ppx/ppx_deriving.make+ppx_deriving.show+ppx_jane/ppx.exe --as-ppx --cookie '\''library-name="covar_kernels"'\'''
-FLG -open Covar_kernels__ -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs -unsafe-string
+FLG -open Covar_kernels__ -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs -unsafe-string -open Base -open Covar_base

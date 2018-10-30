@@ -4,6 +4,8 @@
   (flags
     :standard
     -unsafe-string
+    -open Base
+    -open Covar_base
   )
   (preprocess (pps ppx_jane ppx_deriving.make ppx_deriving.show))
   (synopsis "Various covariance functions (kernels) in OCaml")

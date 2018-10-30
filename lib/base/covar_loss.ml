@@ -1,7 +1,7 @@
 (** Loss calculators over predictive functions *)
 
 
-module Float=Covar_float
+module Float = Covar_float
 
 (** Interface for any loss function for a predictor.
     Requires a predictive function module and an instance of a predictor *)

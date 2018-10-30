@@ -1,6 +1,6 @@
 module Level =
 struct
-type t = [`Trace | `Debug | `Info | `Warn | `Error]
+  type t = [`Trace | `Debug | `Info | `Warn | `Error] [@@deriving sexp]
 end
 
 (* Logging facade with optional level parameter *)

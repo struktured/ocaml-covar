@@ -31,8 +31,7 @@ struct
     val add_support : t -> weight:float -> Instance.t -> t
   end
 
-  module Make(Kernel:Covar_kernel.S with
-               module Instance = Covar_instance.Float) :
+  module Make(Kernel:Covar_kernel.S) :
     S with module Kernel = Kernel =
   struct
     module Kernel = Kernel
@@ -59,7 +58,7 @@ struct
         ~kernel
 
     let predict (t:t) (x:Instance.t) =
-      let instances : Float.t array =
+      let instances : 'a array =
         Instance_buffer.to_array t.instances in
       Array.map instances
         ~f:(fun x' -> Kernel.covar t.kernel x' x) |>

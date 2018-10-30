@@ -2,6 +2,7 @@ open !Import
 
 module Temporal_optional_args =
 struct
+  [@warning "-3"]
   type t = {cycle_len:float [@default 1.0];
             bandwidth:float [@default 1.0]}
             [@@deriving make, show]

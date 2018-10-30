@@ -17,7 +17,6 @@ let from_reader ~instance_of_string reader :
     )
   |> return
 
-
 module Predictive = Covar_predictive
 
 module type OF_STRING_INSTANCE =

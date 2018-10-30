@@ -3,7 +3,7 @@ module Isotropic = Kernel.Stationary.Isotropic
 module Squared_exponential_optional_args =
 struct
   type t = {amplitude:float [@default 1.0];
-            bandwidth:float [@default 1.0]} [@@deriving make, show]
+            bandwidth:float [@default 1.0]} [@@deriving make, sexp]
   let default = make ()
 end
 

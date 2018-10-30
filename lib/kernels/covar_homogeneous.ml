@@ -16,7 +16,7 @@ struct
   include Kernel.Create(Optional_args)
   module Instance = Instance.Array(K.Instance)
   let covar t x x' =
-    let dists = Array.mapi
+    let dists = Array.mapi ~f:
         (fun i k -> K.covar k x.(i) x'.(i)) t.kernels
           |> Lacaml.D.Vec.of_array in
     Lacaml.D.dot t.weights dists

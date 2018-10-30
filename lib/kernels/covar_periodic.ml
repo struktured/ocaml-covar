@@ -4,7 +4,7 @@ module Isotropic = Kernel.Stationary.Isotropic
 module Periodic_optional_args =
 struct
   type t = {amplitude:float [@default 1.0]; period:float [@default 0.5];
-            bandwidth:float [@default 1.0]} [@@deriving make, show]
+            bandwidth:float [@default 1.0]} [@@deriving make, sexp]
   let default = make ()
 end
 
@@ -16,8 +16,10 @@ struct
   open Optional_args
   module Instance = Instance.Float
 
-  type t = {amp_sqr:float [@default 1.0]; period:float [@default 0.5];
-            bandwidth_sqr:float [@default 1.0]}
+  type t = {amp_sqr:float [@default 1.0];
+            period:float [@default 0.5];
+            bandwidth_sqr:float [@default 1.0]
+           } [@@deriving sexp]
 
   let create ?(opt=Optional_args.default) () =
     let open Float in
