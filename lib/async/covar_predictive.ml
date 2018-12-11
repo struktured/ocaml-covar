@@ -1,5 +1,5 @@
 open! Import
-open! Covar_kernels.Std
+open! Covar_kernels
 
 module Predictive = Covar_base.Covar_predictive
 module Base = Covar_base
