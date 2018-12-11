@@ -4,8 +4,8 @@ module Homogeneous = Covar_homogeneous
 module Mat = Kernel.Mat
 
 module Heterogeneous_optional_args
-  (K1 : Kernel.S )
-  (K2 : Kernel.S ) =
+  (K1 : Kernel.S)
+  (K2 : Kernel.S) =
 struct
 type t = {weights:Kernel.mat; kernel1: K1.t array; kernel2 : K2.t array}
            [@@deriving make]
@@ -18,9 +18,9 @@ module Heterogeneous_optional_array_args
   (K1:Kernel.S with module Instance = Instance.Array(I1))
   (K2:Kernel.S with module Instance = Instance.Array(I2)) =
 struct
-type t = {weights:Kernel.mat; kernel1: K1.t array; kernel2 : K2.t array}
+  type t = {weights:Kernel.mat; kernel1: K1.t array; kernel2 : K2.t array}
            [@@deriving make]
-let default = {weights=Lacaml.D.Mat.empty; kernel1=[||];kernel2=[||]}
+  let default = {weights=Lacaml.D.Mat.empty; kernel1=[||];kernel2=[||]}
 end
 
 
@@ -108,7 +108,7 @@ struct
    module Optional_args = Heterogeneous_optional_args(K1)(K2)
    type t = {kernel1:Homogeneous_K1.t;kernel2:Homogeneous_K2.t}
    let create ?opt:_ = failwith("nyi")
- 
+
    module Instance = Instance.Heterogeneous_array_feature(I1)(I2)
   (* type t = {temporal_kernel:Homogeneous_K1.t;
              feature_kernel:Homogeneous_K2.t} [@@deriving make]

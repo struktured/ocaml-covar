@@ -2,6 +2,9 @@ open !Import
 
 module Loss = Covar_loss
 
+(** An update rule produces a new weight
+ from the previous weight and the prediction accuracy
+ of a particular observation instance. *)
 module type S =
 sig
   module Instance : Instance.S

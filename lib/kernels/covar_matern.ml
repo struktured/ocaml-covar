@@ -53,4 +53,4 @@ include (Kernel.Stationary.Wrap
 end
 
 include Nonstationary
-
+module type S = module type of Nonstationary

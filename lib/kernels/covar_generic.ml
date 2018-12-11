@@ -5,7 +5,7 @@ open Base
     instance type ['a].
 *)
 type 'a covar =
-    {weights:Lacaml.D.Vec.t; covars:('a -> 'a -> float) array}
+  {weights:Lacaml.D.Vec.t; covars:('a -> 'a -> float) array}
 
 module Optional_args(Instance:Instance.S)
   (*Optional_args.S with type t = Instance.t covar*) =
@@ -47,4 +47,8 @@ struct
         ~f:(fun i k -> k x.(i) x'.(i))
                 |> Lacaml.D.Vec.of_array in
     Lacaml.D.dot t.weights dists
+
+  let _update t weights =
+    {t with weights}
+
 end

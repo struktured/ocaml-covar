@@ -15,6 +15,9 @@ let map2i t1 t2 ~f = let cnt = ref 0 in map2
 
 end
 
+(** Nonstationary kernels. It accordingly requires
+    two points to compute the covariance.
+*)
 module Nonstationary =
 struct
   module type S =
@@ -23,10 +26,17 @@ struct
     module Optional_args : Optional_args.S
     val create : ?opt:Optional_args.t -> unit -> t
     module Instance : Instance.S
+
+    (** [covar k x x'] applies the covariance function k(x,x')
+        to produce the covarience of instances [x] and [x'].
+    *)
     val covar : t -> Instance.t -> Instance.t -> float
   end
 end
 
+(* Stationary kernels compute the covariance using
+   only the distance between two instances.
+*)
 module Stationary =
 struct
   module type S =
@@ -48,6 +58,10 @@ struct
     let convert x x' = x -. x'
   end
 
+  (** Kernels such that [covar(x,y) = covar(y,x)] and [covar(x,y) =
+      f(|x - y|)] for some covariance function [f] over the distance
+      between [x] and [y].
+  *)
   module Isotropic : Distance(Instance.Float).S =
   struct
     let convert x x' = Anisotropic.convert x x' |> Float.abs
@@ -72,3 +86,4 @@ end
 
 module type S = Nonstationary.S
 
+module type S_FLOAT = Nonstationary.S with module Instance = Instance.Float

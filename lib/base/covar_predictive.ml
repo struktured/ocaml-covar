@@ -1,12 +1,13 @@
 (** Kerned-based predictive functions *)
 module Vec = Lacaml.D.Vec
 module Float = Covar_float
+module Kernel = Covar_kernel
 
 (** A predictive kernel function. Requires a kernel type definition *)
 module type S =
 sig
   type t
-  module Kernel : Covar_kernel.S
+  module Kernel : Kernel.S
   module Instance = Kernel.Instance
   val predict : t -> Instance.t -> float
   (** Given a predictor and an instance, predict the output (target) value. *)
@@ -31,7 +32,7 @@ struct
     val add_support : t -> weight:float -> Instance.t -> t
   end
 
-  module Make(Kernel:Covar_kernel.S) :
+  module Make(Kernel:Kernel.S) :
     S with module Kernel = Kernel =
   struct
     module Kernel = Kernel
@@ -70,10 +71,10 @@ struct
 
     let add_support (t:t) ~(weight:float) instance =
       if Float.equal weight 0. then t else
-        begin
+        (
           Weights_buffer.push_back t.weights weight;
           Instance_buffer.push_back t.instances instance;
           t
-        end
+        )
   end
 end
