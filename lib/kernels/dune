@@ -11,6 +11,6 @@
   (synopsis "Various covariance functions (kernels) in OCaml")
   (library_flags -linkall)
   (libraries
-    covar_base lacaml gsl
+    base covar-base lacaml gsl
   )
 )

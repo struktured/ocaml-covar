@@ -2,15 +2,15 @@
   (name covar_base)
   (public_name covar-base)
   (flags
-    -open Base
     :standard
+    -open Base
     -unsafe-string
   )
   (preprocess (pps ppx_jane ppx_deriving.make))
   (synopsis "Covariance functions in OCaml")
   (library_flags -linkall)
   (libraries
-    threads containers containers.data lacaml gsl
+    base threads containers containers.data lacaml gsl
   )
 )
 

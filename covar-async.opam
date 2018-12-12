@@ -1,0 +1,25 @@
+opam-version: "2.0"
+maintainer: "Carmelo Piccione <carmelo.piccione@gmail.com>"
+authors: "Carmelo Piccione"
+homepage: "https://github.com/struktured/ocaml-covar"
+bug-reports: "https://github.com/struktured/ocaml-covar/issues"
+license: "MIT"
+tags: []
+
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+
+depends: [
+  "core"
+  "async"
+  "dune" {build}
+  "ppx_jane"
+  "covar-base"
+  "covar-kernels"
+  "lacaml"
+  "gsl"
+  "async_extended"
+]
+
+depexts: []

@@ -1,18 +1,13 @@
-open Kaputt.Abbreviations
-module Array = Core.Std.Array
-open Covar.Std
-open Covar_kernels.Std
-module type S_float =
-sig
-include Kernel.S with
-  module Instance = Float
-end
+open Covar_base
+open Covar_kernels
+module Kernel = Covar_kernel
+
 let sprintf = Printf.sprintf
 let some x = Some x
 
 let debug () = false
 
-let printf = Logger.info
+let printf = printf
 
 let _ = begin Gsl_error.handler := function
 | Gsl_error.EOVRFLW
@@ -58,7 +53,7 @@ end
 end
 
 module Make_test_builder
-(K:S_float)
+(K:Kernel.S_FLOAT)
 =
 struct
  module G = Kaputt.Generator
@@ -149,7 +144,7 @@ end
 let equal_to_one _ _ = 1.0
 
 module Make_test_suite
-(K:S_float)
+(K:Covar_kernel.S_FLOAT)
 (Test_params : Test_params(K).S) =
 struct
 module Test_builder = Make_test_builder(K)

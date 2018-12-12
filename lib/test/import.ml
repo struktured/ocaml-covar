@@ -1,3 +1,3 @@
-include Covar_base.Std
-include Covar_kernels.Std
+include Covar_base
+include Covar_kernels
 

@@ -8,7 +8,9 @@ clean:
 install: build
 	dune install
 
+test:
+	dune runtest
 
 .PHONY:
-	build clean
+	build clean test
 

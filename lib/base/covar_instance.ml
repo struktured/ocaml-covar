@@ -51,7 +51,8 @@ struct
  (*  include (H : module type of H with module I1 := I1 and module I2 := I2) *)
 end
 
-type float_array2 = {feature1:Float_array.t;feature2:Float_array.t}
+type float_array2 =
+  {feature1:Float_array.t;feature2:Float_array.t}
 
 module Float_array2 :
 sig
