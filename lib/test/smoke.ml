@@ -10,6 +10,7 @@
 module SE = Covar_kernels.Squared_exponential
 module Matern = Covar_kernels.Matern
 module Periodic = Covar_kernels.Periodic
+module GP = Covar_base.Covar_gp.Make (SE)
 
 let failures = ref 0
 
@@ -46,6 +47,23 @@ let () =
     (approx ~eps:1e-4 (Periodic.covar p 0.0 0.5) (Periodic.covar p 0.0 0.0));
   check "Periodic symmetric"
     (approx (Periodic.covar p 0.0 0.3) (Periodic.covar p 0.3 0.0));
+
+  (* Gaussian-process posterior: mean interpolates the data, variance is
+     small near observations and grows back toward the prior far away. *)
+  let inputs = [| 0.0; 1.0; 2.0; 3.0 |] in
+  let targets = [| 0.0; 1.0; 2.0; 3.0 |] in
+  let gp = GP.create ~noise:1e-6 ~kernel:(SE.create ()) ~inputs ~targets () in
+  let mean_at1, var_at1 = GP.predict gp 1.0 in
+  let mean_far, var_far = GP.predict gp 10.0 in
+  check "GP mean interpolates a training point" (approx ~eps:1e-3 mean_at1 1.0);
+  check "GP variance is ~0 at a training point" (var_at1 < 1e-3);
+  check "GP variance grows away from data" (var_far > var_at1);
+  check "GP variance -> prior amplitude^2 far away" (approx ~eps:1e-2 var_far 1.0);
+  check "GP mean reverts to prior (0) far away"
+    (Stdlib.Float.abs mean_far < 1e-2);
+  check "GP variance is non-negative" (var_at1 >= 0.0 && var_far >= 0.0);
+  check "GP log marginal likelihood is finite"
+    (Stdlib.Float.is_finite (GP.log_marginal_likelihood gp));
 
   if !failures = 0 then Printf.printf "ALL PASS\n"
   else (

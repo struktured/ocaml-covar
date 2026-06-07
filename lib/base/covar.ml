@@ -7,4 +7,5 @@ module Optional_args = Covar_optional_args
 module Kernel = Covar_kernel
 module Loss = Covar_loss
 module Predictive = Covar_predictive
+module Gp = Covar_gp
 module Trig = Covar_trig

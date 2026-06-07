@@ -34,6 +34,8 @@ predictive math live entirely in `covar-base` + `covar-kernels`.
 - Support for temporal kernel descriptors
 - Clean, extensible API for both kernels and data types
 - Arbitrary kernel composition (weighted sums via `Generic`)
+- **Exact Gaussian-process regression** with posterior **mean and variance**
+  (uncertainty), plus the log marginal likelihood — over any kernel
 - Online kernel-weighted predictor with a sliding-window buffer
 - REPL (`utop`) friendly
 
@@ -85,6 +87,36 @@ Hyperparameters are set through each kernel's `Optional_args` (e.g.
 `create` / `covar` interface is shared by every kernel, so they compose and
 swap freely.
 
+### Gaussian-process regression (mean + uncertainty)
+
+`Covar_gp.Make` turns any kernel into an exact GP regressor that returns both a
+predictive mean and a **variance**:
+
+```ocaml
+module SE = Covar_kernels.Squared_exponential
+module GP = Covar_base.Covar_gp.Make (SE)
+
+let gp =
+  GP.create
+    ~noise:1e-6
+    ~kernel:(SE.create ())
+    ~inputs:[| 0.0; 1.0; 2.0; 3.0 |]
+    ~targets:[| 0.0; 1.0; 2.0; 3.0 |]
+    ()
+
+let () =
+  let mean, var = GP.predict gp 1.0 in    (* near data: mean~=1, var~=0    *)
+  let _mean, far_var = GP.predict gp 10.0 in (* far away: var -> prior amp^2 *)
+  Printf.printf "mean=%f std=%f far_std=%f lml=%f\n"
+    mean (sqrt var) (sqrt far_var) (GP.log_marginal_likelihood gp)
+```
+
+The variance collapses toward zero near observations and grows back to the
+prior amplitude far from the data — exactly the calibrated uncertainty that
+makes GPs useful for confidence-aware decisions. The factorization is computed
+once (Cholesky, via `lacaml`); each `mean` is then an `O(n)` dot product and
+each `variance` an `O(n^2)` solve.
+
 ## Testing
 
 `dune runtest` runs `lib/test/smoke.ml`, which checks the core covariance
@@ -96,11 +128,9 @@ The original Kaputt-based property suite is preserved as
 
 ## Roadmap
 
-- **Gaussian-process inference layer** — exact GP posterior **mean and
-  variance** over any kernel (`K = [k(xᵢ,xⱼ)] + σ²I`, Cholesky solve via
-  `lacaml`), plus marginal-likelihood hyperparameter fitting. The kernels here
-  are the foundation; the posterior-variance / uncertainty layer is the next
-  addition.
+- **Hyperparameter optimization** — `Covar_gp` already exposes the log marginal
+  likelihood; add an optimizer (e.g. gradient or Nelder–Mead) to fit amplitude,
+  bandwidth, and noise by maximizing it.
 - Re-enable the `covar-async` streaming layer without `async_extended`.
 - Port the legacy property tests.
 
