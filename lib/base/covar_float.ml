@@ -17,13 +17,12 @@ end
 include Float0
 let default_epsilon = 1e-5
 
-(*
-let compare ?(epsilon=default_epsilon) =
-  Gsl.Math.fcmp ~epsilon
+(* Epsilon-tolerant comparison (relative, via gsl_fcmp). Kept distinct from
+   [compare] so the module still satisfies Covar_float.S (Base.Float's compare). *)
+let compare_eps ?(epsilon=default_epsilon) x x' =
+  Gsl.Math.fcmp ~epsilon x x'
 
 let equals ?epsilon x x' =
-  match compare ?epsilon x x' with 0 -> true | _ -> false
-
-*)
+  match compare_eps ?epsilon x x' with 0 -> true | _ -> false
 
 let dummy = 0.0

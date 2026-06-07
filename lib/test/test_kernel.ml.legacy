@@ -9,19 +9,19 @@ let debug () = false
 
 let printf = printf
 
-let _ = begin Gsl_error.handler := function
-| Gsl_error.EOVRFLW
-| Gsl_error.EUNDRFLW ->
+let _ = begin Gsl.Error.handler := function
+| Gsl.Error.EOVRFLW
+| Gsl.Error.EUNDRFLW ->
   (fun message -> printf "(over|under)flow condition: %s\n" message)
-| e -> fun message -> failwith (sprintf "Gsl_error(%s): %s"
-        (Gsl_error.strerror e) message)
+| e -> fun message -> failwith (sprintf "Gsl.Error(%s): %s"
+        (Gsl.Error.strerror e) message)
 end
 module Predicates =
 struct
 
  let _compare ?epsilon ~target = fun ~actual x x' ->
   if debug () then printf "[cmp (actual=%f) (target=%f)]\n" actual target;
-  let cmp = Float.compare ?epsilon actual target in
+  let cmp = Covar_float.compare_eps ?epsilon actual target in
   cmp
 
  let equal_to ?epsilon ~expected = fun ~actual x x' ->

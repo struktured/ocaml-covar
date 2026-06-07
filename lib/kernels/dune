@@ -3,7 +3,6 @@
   (public_name covar-kernels)
   (flags
     :standard
-    -unsafe-string
     -open Base
     -open Covar_base
   )

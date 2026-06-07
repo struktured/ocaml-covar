@@ -35,7 +35,6 @@ let covar t x =
     x ** t.v *
     begin
     Logger.info "[matern covar] bessel_k (v=%f) (x=%f)\n" t.v x;
-    Caml.(flush stdout);
     K_v.bessel_k ~nu:t.v x
     end
 end

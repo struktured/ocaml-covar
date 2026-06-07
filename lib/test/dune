@@ -1,10 +1,4 @@
-(library
-  (name covar_test)
-  (library_flags -linkall)
-  (libraries covar-base covar-kernels expect_test_helpers)
-  (synopsis "Covariance unit tester")
-  (flags :standard -open Core -open Async
-   -open Expect_test_helpers_kernel)
-  (inline_tests (flags :standard) (deps (universe)))
-  (preprocess (pps ppx_jane))
-)
+(test
+  (name smoke)
+  (modules smoke)
+  (libraries covar-base covar-kernels))
