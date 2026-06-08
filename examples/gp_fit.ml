@@ -71,14 +71,24 @@ let () =
   let noise = arg "-noise" 1e-4 in
   let opt = SE.Optional_args.make ~amplitude ~bandwidth () in
   let kernel = SE.create ~opt () in
-  let gp = GP.create ~noise ~kernel ~inputs ~targets () in
+  (* Constant mean function: fit the GP to de-meaned targets and add the mean
+     back on prediction. Without this a zero-mean GP reverts toward 0 in gaps
+     and extrapolation, which is wrong for data not centred on zero. *)
+  let ybar = Array.fold_left ( +. ) 0.0 targets /. float_of_int n in
+  let centered = Array.map (fun y -> y -. ybar) targets in
+  let gp = GP.create ~noise ~kernel ~inputs ~targets:centered () in
+  let predict x =
+    let m, v = GP.predict gp x in
+    m +. ybar, v
+  in
   Printf.printf
-    "GP fit: n=%d  amplitude=%g  bandwidth=%g  noise=%g  log-marginal-lik=%.4f\n"
-    n amplitude bandwidth noise (GP.log_marginal_likelihood gp);
+    "GP fit: n=%d  amplitude=%g  bandwidth=%g  noise=%g  mean=%.4f  \
+     log-marginal-lik=%.4f\n"
+    n amplitude bandwidth noise ybar (GP.log_marginal_likelihood gp);
   Printf.printf "\n  x        y(obs)   mean     std      resid    flag\n";
   Array.iteri
     (fun i x ->
-      let m, v = GP.predict gp x in
+      let m, v = predict x in
       let s = sqrt v in
       let y = targets.(i) in
       let resid = y -. m in
@@ -97,7 +107,7 @@ let () =
     let x =
       xmin +. ((xmax -. xmin) *. float_of_int k /. float_of_int steps)
     in
-    let m, v = GP.predict gp x in
+    let m, v = predict x in
     Printf.printf "  %-7.3f  %.3f  +/- %.3f\n" x m (sqrt v)
   done;
   if Array.exists (fun z -> z <> None) scores then (
@@ -109,7 +119,7 @@ let () =
         match scores.(i) with
         | None -> ()
         | Some z ->
-          let m, v = GP.predict gp x in
+          let m, v = predict x in
           let s = sqrt v in
           let dev = if s > 0.0 then (z -. m) /. s else 0.0 in
           let flag =
