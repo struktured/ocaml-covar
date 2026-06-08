@@ -1,0 +1,3 @@
+(executable
+  (name gp_fit)
+  (libraries covar-base covar-kernels))
